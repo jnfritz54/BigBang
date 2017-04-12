@@ -95,6 +95,8 @@ class Star_object{
 			"100"=>"O", //2 
 	);
 	
+	public $systeme=null;
+	
 	//type de l'étoile à sa création
 	public $typeOrigine=null;
 	
@@ -108,7 +110,7 @@ class Star_object{
 	public $age;
 	
 
-	public function __construct(){
+	public function __construct($systeme=null){
 			
 		//détermination de son type
 		$proba=rand(0,100);
@@ -143,6 +145,8 @@ class Star_object{
 			}
 		}
 		
+		$this->systeme=$systeme;		
+		
 	}
 	
 	public function __toString(){
@@ -150,7 +154,7 @@ class Star_object{
 	}
 	
 	public function __toSqlValues(){
-		return "('','".$this->typeOrigine."','".$this->periodeActuelle."','".$this->typeSurcharge."',
+		return "('','".$this->systeme."' ,'".$this->typeOrigine."','".$this->periodeActuelle."','".$this->typeSurcharge."',
 				'".$this->age."','".$this->masseOrigine."') ";
 	}
 	
