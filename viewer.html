@@ -1,0 +1,78 @@
+<html>
+<head>
+	<script src="./jquery-3.2.1.min.js"></script>
+</head>
+<body>
+<canvas id="screen" width="1200px" height="1200px" style="border:1px solid #000000;">
+
+</canvas>
+<div id="debug">-</div>
+
+<script type="text/javascript">
+var canvas = document.getElementById("screen");
+var canvasWidth = canvas.width;
+var canvasHeight = canvas.height;
+var ctx = canvas.getContext("2d");
+ctx.fillStyle = "#FF0000";
+var canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+var galacticData;
+var x;
+var y;
+
+getDataAndDraw();
+
+// That's how you define the value of a pixel //
+function drawPixel (x, y, r, g, b, a) {
+    var index = (x + y * canvasWidth) * 4;
+
+    canvasData.data[index + 0] = r;
+    canvasData.data[index + 1] = g;
+    canvasData.data[index + 2] = b;
+    canvasData.data[index + 3] = a;
+}
+
+// That's how you update the canvas, so that your //
+// modification are taken in consideration //
+function updateCanvas() {
+    ctx.putImageData(canvasData, 0, 0);
+}
+
+function getGalacticData(offset=0){		
+	$.ajax({
+	    type: 'POST',
+	    url: "http://localhost/perso/bigbang/viewer.php",
+	    data: {'offset':offset},
+	    
+	    complete: function(data) {			   
+		    if (data.responseText.trim() == ""){
+		    	alert("vide");
+			} else {
+				galacticData=JSON.parse(data.responseText.trim());
+				//document.getElementById('debug').innerHTML="response: "+data.responseText.trim();
+			}					    
+	    }
+	  });
+}
+
+function getDataAndDraw(offset=0){
+	alert(offset);
+	getGalacticData(offset);
+	for(var index in galacticData){
+		var point=galacticData[index];
+		//document.getElementById('debug').innerHTML=point['x']+" "+point['y']+" - ";
+		drawPixel(point['x']+600, point['y']+600, 255, 0, 250, 250);
+		//ctx.fillRect(point['x']+350, point['y']+350,1,1);	
+		
+	}
+	updateCanvas();
+	if(offset<1000000){
+		getDataAndDraw(offset+100000);
+	}else{
+		updateCanvas();
+	}
+}
+
+</script>
+
+</body>
+</html>

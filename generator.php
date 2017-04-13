@@ -12,7 +12,7 @@
 	$mysqli=new MySQLi_2("localhost","root", "root", "perso");
 	
 	$i=0;
-	while($i<100000){
+	while($i<1000000){
 		$systeme=new Systeme();
 		$sysValues[]=$systeme->__toSqlValues();
 		$nbStars=rand(1,2);
@@ -37,4 +37,11 @@
 		$mysqli->query($requete);
 	}
 	echo "End\n";
+	
+	function polaireToCartesien($rayon,$angle){
+		$x=$rayon*cos($angle);
+		$y=$rayon*sin($angle);
+		
+		return array("x"=>$x,"y"=>$y);
+	}
 ?>
