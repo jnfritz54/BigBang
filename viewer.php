@@ -8,11 +8,11 @@ $mysqli=new MySQLi_2("localhost","root", "root", "perso");
 $result=array();
 $offset=0;
 if(isset($_POST)){
-	if(isset($_POST['offset']) && $_POST['offset']!=0){$offset=intval($_POST['offset']);}
+	if(isset($_POST['offset'])){$offset=intval($_POST['offset']);}
 	
 	//mettre en cache les étoiles par système:
-	$query="select * from Stars where systeme>".$offset." order by Id limit 100000;";
-	$res=$mysqli->query($query);
+	//$query="select * from Stars where systeme>".$offset." order by Id limit 100000;";
+	//$res=$mysqli->query($query);
 	
 	$query="select * from Systemes where id>".$offset." order by Id limit 100000;";
 	$res=$mysqli->query($query);
