@@ -19,9 +19,10 @@ if(isset($_POST)){
 	$cpt=0;
 	while($row=$res->fetch_assoc()){
 		$tmp=polaireToCartesien($row['distance'],$row['angle']);
-		$tmp['x']=intval($tmp['x']/(50000/600));
+		$tmp['x']=intval($tmp['x']/(50000/400));
 		//$tmp['x']=intval($tmp['x']/2);
-		$tmp['y']=intval($tmp['y']/(50000/600));
+		$tmp['y']=intval($tmp['y']/(50000/400));
+		$tmp['z']=intval($row['altitude']/(50000/400));
 		//$tmp['y']=intval($tmp['y']/2);
 		$result[]=$tmp;
 		$cpt++;

@@ -4,8 +4,7 @@
 	include 'Systeme_object.php';
 	include 'Planete_object.php';
 	require_once('MySQLi_2.php');
-	
-	
+		
 	$starInsert="insert into Stars values ";
 	$starValues=array();
 	$sysInsert="insert into Systemes values ";
@@ -17,7 +16,7 @@
 	
 	$i=0;
 	$cptStars=0;
-	while($i<1000000){
+	while($i<100000){
 		$systeme=new Systeme();
 		$sysValues[]=$systeme->__toSqlValues();
 		$nbStars=rand(1,2);
@@ -37,7 +36,7 @@
 				$sysValues=array();$starValues=array();
 			}			
 		}
-		
+
 		$nbPlanets=rand(1,14);
 		for($h=0;$h<$nbPlanets;$h++){
 			$orbited=null;			
@@ -54,7 +53,7 @@
 			$planeteValues[]=$planete->__toSqlValues();
 		}
 		
-		if(count($planeteValues)>800){			
+		if(count($planeteValues)>900){			
 			$requeteP=$planeteInsert.join(", ",$planeteValues).";";
 			$mysqli->query($requeteP);			
 			$planeteValues=array();

@@ -37,8 +37,10 @@ class Systeme{
 			if($probaZone<=$key){$zone=$potentiel;break;}
 		}
 		
-		$this->altitude=maths_service::probaDescendante(0,maths_service::float_rand(0,galaxy::$altitudeMax,2),4);
-		$this->altitude=bcdiv(galaxy::$altitudeMax,2,4)-$this->altitude;
+		$this->altitude=maths_service::probaDescendante(0,maths_service::float_rand(0,bcdiv(galaxy::$altitudeMax,2),2),4);
+		if(rand(0,10)<=5){
+			$this->altitude=-$this->altitude;
+		}
 		
 		switch ($zone){
 			case "bras":
@@ -61,7 +63,35 @@ class Systeme{
 			//le bulbe contient 5 à 10% des étoiles
 			case "bulbe":				
 				$this->angle=maths_service::float_rand(0,360,4);
-				$this->distance=maths_service::float_rand(1,galaxy::$rayonMin,2);
+				
+				$distanceBrute=maths_service::probaDescendante(1,galaxy::$rayonMin,4);				
+				//version 1: théorème de pythagore AB²=AC²+BC²
+				$ab2=bcmul($distanceBrute,$distanceBrute);
+				$bc=maths_service::float_rand(0, $distanceBrute,4);
+				$bc2=bcmul($bc,$bc);
+				$ac2=$ab2-$bc2;
+				$ac=sqrt($ac2);
+				
+				
+				$this->distance=$ac;
+				$this->altitude=$bc;
+				
+				/**
+				// version 2 : loi des sinus: a / sin(α) = b / sin(β) = c / sin(γ) 
+				$C=$angleVertical=maths_service::probaDescendante(0,90,4);
+				$a=$distanceBrute;
+				$A=90;
+				$B=180-$C-$A;
+				$b=$a*sin(deg2rad($B));
+				$c=$a*sin(deg2rad($C));
+				
+				$this->distance=$c;
+				$this->altitude=$b;
+				*/
+				//$this->altitude=maths_service::probaDescendante(0,maths_service::float_rand(0,bcdiv(galaxy::$epaisseurBulbe,2),2),4);
+				if(rand(0,10)<=5){
+					$this->altitude=-$this->altitude;
+				}
 				break;
 			case "partout":
 			default:

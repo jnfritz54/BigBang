@@ -16,7 +16,8 @@ abstract class galaxy{
 	static $rayonMax=50000;
 	static $angleMin=40;
 	static $altitudeMax=1000;
-	static $epaisseurBras=1000;
+	static $epaisseurBras=1200;
+	static $epaisseurBulbe=2800;
 	
 	//paramétrage des bras: angle de départ & ouverture en degrés (360= spirale atteind le bord en 1 tour)
 	static $bras=array(

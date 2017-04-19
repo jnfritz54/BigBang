@@ -6,12 +6,20 @@ class Planete{
 	private $naturePlanete=array('T'=>'tellurique','G'=> 'gazeuse',
 			'C'=>'chtonienne','A'=>'ceinture asteroides',"B"=>'naine brune');
 	
+	private $probaNature=array(
+		45=>'T',
+		80=>'G',
+		93=>'A',
+		96=>'C',
+		100=>'B'
+	);
+	
 	private $sousCategorie=array(
 			"T"=>array("Tf"=>"en fusion","Ts"=>"sterile et/ou sans atmosphere","Ta"=>"aride","Tt"=>"earth-like","Te"=>"à dominante aquatique"),
 			"G"=>array("Gh"=>"Hydrogène", "Ghe"=>"Helium","Gm"=>"Methane"),
 			"C"=>array("C"=>"Standard"),
 			"A"=>array("Ad"=>"Dense","Al"=>"dispersee"),
-			"B"=>array("B"=>"Standard"),
+			"B"=>array("B"=>"Standard","Bs"=>"Sous-naine brune"),
 	);
 	
 	//masses exprimées en masses terrestres
