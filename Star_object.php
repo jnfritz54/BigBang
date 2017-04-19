@@ -127,10 +127,10 @@ class Star_object{
 		}
 		
 		//détermination de sa masse
-		$this->masseOrigine=$this->float_rand($this->massesByType[$this->typeOrigine]['min'],$this->massesByType[$this->typeOrigine]['max']);
+		$this->masseOrigine=maths_service::float_rand($this->massesByType[$this->typeOrigine]['min'],$this->massesByType[$this->typeOrigine]['max']);
 		
 		//détermination de son age
-		$this->age=$this->float_rand(0,$this->ageOfUniverse);
+		$this->age=maths_service::float_rand(0,$this->ageOfUniverse);
 		
 		//calcul de son état actuel selon son age:
 		foreach ($this->evolutionByType[$this->typeOrigine] as $periode){
@@ -158,15 +158,5 @@ class Star_object{
 				'".$this->age."','".$this->masseOrigine."') ";
 	}
 	
-	private function float_rand($Min, $Max, $round=4){
-		//validate input
-		if ($Min>$Max) { $min=$Max; $max=$Min; }
-		else { $min=$Min; $max=$Max; }
-		$randomfloat = $min + mt_rand() / mt_getrandmax() * ($max - $min);
-		if($round>0)
-			$randomfloat = round($randomfloat,$round);
-	
-		return $randomfloat;
-	}
 }
 ?>

@@ -1,18 +1,9 @@
 <?php 
 namespace BigBang;
 include('Galaxy_object.php');
+include 'maths_service.php';
 
 class Systeme{
-	
-	//probabilité de positionnement dans une galaxie à 4 bras spiraux d'origine équi-angulaire
-	private $probaPosition=array(10=>"bulbe",60=>"partout",100=>"bras");
-	//distances en années lumières
-	//angles en degrés
-	private $rayonMin=5000; //le bulbe a un diametre entre 7k et 15k al
-	private $rayonMax=50000;
-	private $angleMin=45;
-	private $altitudeMax=1000;
-	private $epaisseurBras=1000;
 	
 	public $id;
 	public $name;
@@ -46,53 +37,45 @@ class Systeme{
 			if($probaZone<=$key){$zone=$potentiel;break;}
 		}
 		
+		$this->altitude=maths_service::probaDescendante(0,maths_service::float_rand(0,galaxy::$altitudeMax,2),4);
+		$this->altitude=bcdiv(galaxy::$altitudeMax,2,4)-$this->altitude;
+		
 		switch ($zone){
 			case "bras":
 				//quel bras ?
 				$brasIndex=rand(0,count(galaxy::$bras)-1);
+				//$this->angle=maths_service::float_rand(galaxy::$angleMin,galaxy::$bras[$brasIndex]['ouverture'],4);
+				$this->angle=maths_service::probaDescendante(galaxy::$angleMin,galaxy::$bras[$brasIndex]['ouverture'],4);
 				
-				$this->angle=$this->float_rand(galaxy::$angleMin,galaxy::$bras[$brasIndex]['ouverture'],4);
 				//calcul de la distance moyenne pour être dans un bras à l'angle donné
 				//en considérant qu'un bras atteind la bordure en un tour complet (à vérifier)
 				$distanceMoyenne=bcmul(galaxy::$rayonMax, bcdiv($this->angle,galaxy::$bras[$brasIndex]['ouverture'],4),4);
 				$distanceMin=$distanceMoyenne-(galaxy::$epaisseurBras/2);
-				$distanceFinale=$distanceMoyenne+$this->float_rand(0,galaxy::$epaisseurBras,2);
+				$distanceFinale=$distanceMoyenne+maths_service::float_rand(0,galaxy::$epaisseurBras,2);
 				
 				//$this->distance=$distanceFinale;
 				$this->distance=$distanceFinale;
-				$this->altitude=$this->float_rand(0,galaxy::$altitudeMax,2);
 				$this->angle+=galaxy::$bras[$brasIndex]['angle'];
 				break;
 			
 			//le bulbe contient 5 à 10% des étoiles
-			case "bulbe":
-				$this->altitude=$this->float_rand(0,galaxy::$altitudeMax,2);
-				$this->angle=$this->float_rand(0,360,4);
-				$this->distance=$this->float_rand(1,galaxy::$rayonMin,2);
+			case "bulbe":				
+				$this->angle=maths_service::float_rand(0,360,4);
+				$this->distance=maths_service::float_rand(1,galaxy::$rayonMin,2);
 				break;
 			case "partout":
 			default:
-				$this->altitude=$this->float_rand(0,galaxy::$altitudeMax,2);
-				$this->angle=$this->float_rand(0,360,4);
-				$this->distance=$this->float_rand(galaxy::$rayonMin,galaxy::$rayonMax,2);
+				
+				$this->angle=maths_service::float_rand(0,360,4);
+				//$this->distance=maths_service::float_rand(galaxy::$rayonMin,galaxy::$rayonMax,2);
+				$this->distance=maths_service::probaDescendante(galaxy::$rayonMin,galaxy::$rayonMax,2);
 				break;	
 		}
 		
 		
 	}
 	
-	private function float_rand($Min, $Max, $round=4){
-		//validate input
-		if ($Min>$Max) { $min=$Max; $max=$Min; }
-		else { $min=$Min; $max=$Max; }
-		$randomfloat = $min + mt_rand() / mt_getrandmax() * ($max - $min);
-		if($round>0)
-			$randomfloat = round($randomfloat,$round);
-	
-			return $randomfloat;
-	}
-	
-	private function RandomString($length) {
+	static function RandomString($length) {
 	    $keys = array_merge(range('a', 'z'), range('A', 'Z'));
 	    $key="";
 	    for($i=0; $i < $length; $i++) {
@@ -100,6 +83,8 @@ class Systeme{
 	    }
 	    return $key;
 	}
+	
+
 
 }
 

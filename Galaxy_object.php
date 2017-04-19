@@ -9,7 +9,7 @@ namespace BigBang;
  */
 abstract class galaxy{
 	//probabilité de positionnement dans une galaxie à 4 bras spiraux d'origine équi-angulaire
-	static $probaPosition=array(5=>"bulbe",60=>"partout",100=>"bras");
+	static $probaPosition=array(10=>"bulbe",80=>"partout",100=>"bras");
 	//distances en années lumières
 	//angles en degrés
 	static $rayonMin=5000; //le bulbe a un diametre entre 7k et 15k al

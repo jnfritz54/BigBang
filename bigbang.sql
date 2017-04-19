@@ -20,3 +20,15 @@ CREATE TABLE IF NOT EXISTS `Systemes` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
+
+CREATE TABLE IF NOT EXISTS `Planetes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `systeme` int(11) NOT NULL,
+  `objectOrbited` int(11) DEFAULT NULL,
+  `type` varchar(3) NOT NULL,
+  `masse` float NOT NULL,
+  `particularite` varchar(50) DEFAULT NULL,
+  `distanceEtoile` float NOT NULL,
+  `dureeJour` float DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
