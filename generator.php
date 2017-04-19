@@ -16,7 +16,7 @@
 	
 	$i=0;
 	$cptStars=0;
-	while($i<100000){
+	while($i<1000000){
 		$systeme=new Systeme();
 		$sysValues[]=$systeme->__toSqlValues();
 		$nbStars=rand(1,2);
