@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS `Stars` (
   `typeSurcharge` varchar(2) DEFAULT NULL,
   `age` float NOT NULL,
   `masseOrigine` float NOT NULL,
+  `rayonnement` float DEFAULT NULL,
+  `rayon` FLOAT NOT NULL ;
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

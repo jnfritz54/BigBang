@@ -35,5 +35,30 @@ abstract class maths_service{
 	
 		return $result;
 	}
+	
+	static function probaRepartitionCentraleDescendante($min,$max,$round=4){
+		throw new \Exception("Not implemented");
+		
+		$random=self::float_rand($min, $max,$round);
+	
+		$x=self::float_rand(0, 1,10);
+		$tmp=bcdiv(sin(($x+2))-cos(($x+2)),($x+1.5),10)+1;
+		$y=bcdiv($tmp,2,10);
+		//echo $random." sur [".$min." -> ".$max."] \n";
+		//echo $ratio." ".$x." ".$y;die;
+		//$result=$y/$ratio;
+	
+		$result=bcmul($random,$y,4);
+	
+		return $result;
+	}
+		
+	static function exp2int($exp) {
+		list($mantissa, $exponent) = explode("e", strtolower($exp));
+		if($exponent=='') return $exp;
+		list($int, $dec) = explode(".", $mantissa);
+		bcscale (abs($exponent-strlen($dec)));
+		return bcmul($mantissa, bcpow("10", $exponent));
+	}
 }
 ?>

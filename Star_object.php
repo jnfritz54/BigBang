@@ -79,7 +79,7 @@ class Star_object{
 			"B"=>array("min"=>"3","max"=>"10"),
 			"O"=>array("min"=>"10","max"=>"300"),
 	);
-	
+
 	/***
 	 * gère les probabilités des types d'étoiles créées !
 	 * @var array $probaType
@@ -108,6 +108,12 @@ class Star_object{
 	public $masseOrigine;	
 	
 	public $age;
+	
+	public $temperature;
+	
+	public $rayonnement;
+	
+	public $rayon;
 	
 
 	public function __construct($systeme=null){
@@ -145,7 +151,11 @@ class Star_object{
 			}
 		}
 		
-		$this->systeme=$systeme;		
+		$this->systeme=$systeme;	
+		
+		//calcul approx du rayon et de la luminosité d'après la masse
+		$this->massLuminosityRelationWithSurcharge();
+		$this->massRayonRelationWithSurcharge();
 		
 	}
 	
@@ -155,8 +165,114 @@ class Star_object{
 	
 	public function __toSqlValues(){
 		return "('','".$this->systeme."' ,'".$this->typeOrigine."','".$this->periodeActuelle."','".$this->typeSurcharge."',
-				'".$this->age."','".$this->masseOrigine."') ";
+				'".$this->age."','".$this->masseOrigine."','".$this->rayonnement."','".$this->rayon."') ";
+	}
+
+	private function massLuminosityRelationWithSurcharge(){
+		switch($this->typeSurcharge){
+			case 4: //blackhole: lum 0
+				$this->rayonnement=0;
+				break;
+			case 3: //neutronstar: lum 0
+				$this->rayonnement=0;
+				break;
+			case 'D':	//naines blanches
+			case 'D2':
+				$this->rayonnement=10000;
+				break;
+			case 1: //proto-star lum ~0
+				$this->rayonnement=10000;
+				break;
+			default:
+				$this->massLuminosityRelation();
+				break;
+		}
 	}
 	
+	//https://en.wikipedia.org/wiki/Mass%E2%80%93luminosity_relation
+	private function massLuminosityRelation(){
+		$luminositeSoleil='3.846e26'; //exprimée en W 
+		$luminositeSoleil=maths_service::exp2int($luminositeSoleil);
+		$masseSoleil='1.9891e30';
+		$masseSoleil=maths_service::exp2int($masseSoleil);
+		
+		$multiplier=1;
+		$puissance=4;
+		if($this->masseOrigine<=0.43){
+			$multiplier=0.23;
+			$puissance=2.3;
+		}elseif($this->masseOrigine<=2){
+			$multiplier=1;
+			$puissance=4;
+		}elseif($this->masseOrigine<=20){
+			$multiplier=1.5;
+			$puissance=3.5;
+		}elseif($this->masseOrigine>20){
+			$multiplier=3200;
+			$puissance=1;
+		}
+		//L=(multiplier*(M/masseSoleil)^puissance)/luminositéSoleil 	
+		$M=bcmul($masseSoleil,$this->masseOrigine);
+		$MM=bcdiv($M,$masseSoleil,4);
+		$L=bcmul(bcmul($multiplier,	pow($MM,$puissance)),$luminositeSoleil,4);
+
+		$this->rayonnement=$L;
+		return $L;
+	}
+
+	private function massRayonRelationWithSurcharge(){
+		switch($this->typeSurcharge){
+			case 4: //blackhole: lum 0
+				$this->rayon=0;
+				break;
+			case 3: //neutronstar: lum 0
+				$this->rayon=maths_service::float_rand(15000, 30000);
+				break;
+			case 2:	
+				//approx dégueulasse pour faire artificiellement grossir les géantes rouges				
+				$this->rayon=bcmul($this->massRayonRelationSequencePrincipale(),2);
+				break;
+			case 'D':	//naines blanches
+			case 'D2':
+				$this->massRayonRelationNaineBlanche();
+				break;
+			case 1: //proto-star lum ~0
+				$this->rayon=10000000;
+				break;
+			default:
+				$this->massRayonRelationSequencePrincipale();
+				break;
+		
+		}
+	}
+	
+	private function massRayonRelationSequencePrincipale(){
+		//http://www2.astro.psu.edu/users/rbc/a534/lec18.pdf
+		//https://fr.wikipedia.org/wiki/Relation_masse-rayon#.C3.89toiles_de_la_s.C3.A9quence_principale
+		$rayonSoleil='695700000'; //exprimée en m		
+		$masseSoleil='1.9891e30';
+		$masseSoleil=maths_service::exp2int($masseSoleil);
+
+		$puissance=4;
+		if($this->masseOrigine<=1){
+			$puissance=0.8;
+		}elseif($this->masseOrigine>1){
+			$puissance=0.57;
+		}
+		//L=(multiplier*(M/masseSoleil)^puissance)/luminositéSoleil
+		$M=bcmul($masseSoleil,$this->masseOrigine);
+		$MM=bcdiv($M,$masseSoleil,4);
+		$R=bcmul(pow($MM,$puissance),$rayonSoleil,4);
+		
+		$this->rayon=$R;
+		return $R;
+	}
+	
+	private function massRayonRelationNaineBlanche(){
+		$rayonSoleil='695700000'; //exprimée en m
+		$rayon=bcdiv(1/pow($this->masseOrigine,bcdiv(1,3,6)),4);
+		$this->rayon=bcmul($rayon,$rayonSoleil,5);
+		return $this->rayon;
+	}
 }
 ?>

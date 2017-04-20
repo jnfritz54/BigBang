@@ -19,7 +19,7 @@
 	while($i<1000000){
 		$systeme=new Systeme();
 		$sysValues[]=$systeme->__toSqlValues();
-		$nbStars=rand(1,2);
+		$nbStars=rand(1,3);
 		
 		$systemStars=array();
 		
@@ -37,7 +37,7 @@
 			}			
 		}
 
-		$nbPlanets=rand(1,14);
+		$nbPlanets=rand(1,15);
 		for($h=0;$h<$nbPlanets;$h++){
 			$orbited=null;			
 			if(count($systemStars)==1){

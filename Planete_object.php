@@ -4,14 +4,15 @@ namespace BigBang;
 class Planete{
 	
 	private $naturePlanete=array('T'=>'tellurique','G'=> 'gazeuse',
-			'C'=>'chtonienne','A'=>'ceinture asteroides',"B"=>'naine brune');
+			'C'=>'chtonienne','A'=>'ceinture asteroides',"B"=>'naine brune','P'=>"Planetoide rocheux");
 	
 	private $probaNature=array(
-		45=>'T',
-		80=>'G',
-		93=>'A',
-		96=>'C',
-		100=>'B'
+		35=>'T',
+		70=>'G',
+		80=>'A',
+		85=>'C',
+		90=>'B',
+		100=>'P'
 	);
 	
 	private $sousCategorie=array(
@@ -20,15 +21,26 @@ class Planete{
 			"C"=>array("C"=>"Standard"),
 			"A"=>array("Ad"=>"Dense","Al"=>"dispersee"),
 			"B"=>array("B"=>"Standard","Bs"=>"Sous-naine brune"),
+			"P"=>array("C"=>"Standard"),
 	);
 	
 	//masses exprimées en masses terrestres
 	private $massesParType=array(
-		'T'=>array("min"=>0.3,"max"=>15),
-		'G'=>array("min"=>25,"max"=>450),
+		'T'=>array("min"=>0.3,"max"=>25),
+		'G'=>array("min"=>25,"max"=>1250),
 		'C'=>array("min"=>0.5,"max"=>20),
 		'A'=>array("min"=>0.001,"max"=>0.1),
 		'B'=>array("min"=>4000,"max"=>23775),
+		'P'=>array("min"=>0.01,"max"=>0.3),
+	);
+	
+	private $albedoParType=array(
+		'T'=>array("min"=>0.1,"max"=>1),
+		'G'=>array("min"=>0.3,"max"=>0.9),
+		'C'=>array("min"=>0.1,"max"=>0.5),
+		'A'=>array("min"=>0.05,"max"=>0.3),
+		'B'=>array("min"=>0.1,"max"=>0.5),
+		'P'=>array("min"=>0.05,"max"=>0.3),
 	);
 	
 	private $particularitePlanete=array(50=>"aucune",70=>'lune',80=>'lunes multiples',90=>'anneaux',100=>'champ de débris');
@@ -49,7 +61,9 @@ class Planete{
 	public $particularite;
 	
 	public $distanceEtoile;
-		
+	
+	public $albedo;
+	
 	public $dureeJour;
 
 	public function __construct($systeme,$idObjetOrbited){
@@ -62,7 +76,6 @@ class Planete{
 		
 		//détermination de sa particularité
 		$proba=rand(0,100);
-		
 		foreach ($this->particularitePlanete as $range => $class){
 			if($proba<=$range){
 				$this->particularite=$class;break;
@@ -72,6 +85,7 @@ class Planete{
 		}
 		$this->systeme=$systeme;
 		$this->objectOrbited=$idObjetOrbited;
+		$this->albedo=maths_service::float_rand($this->albedoParType[$this->type]['min'], $this->albedoParType[$this->type]['max']);
 	}
 	
 	public function __toString(){
@@ -83,7 +97,7 @@ class Planete{
 	
 	public function __toSqlValues(){
 		return "('',".$this->systeme.",".$this->objectOrbited.",'".$this->type."','".$this->masse."','"
-				.$this->particularite."',".$this->distanceEtoile.",'".$this->dureeJour."') ";
+				.$this->particularite."',".$this->distanceEtoile.",'".$this->dureeJour."','".$this->albedo."') ";
 	}
 	
 	public function simplifiedCircularOrbit(){
