@@ -246,6 +246,13 @@ class Star_object{
 		}
 	}
 	
+	private function massRayonRelationBlackHole(){
+		//https://fr.wikipedia.org/wiki/Horizon_des_%C3%A9v%C3%A8nements
+		// R= (2GM)/c²
+		
+		
+	}
+	
 	private function massRayonRelationSequencePrincipale(){
 		//http://www2.astro.psu.edu/users/rbc/a534/lec18.pdf
 		//https://fr.wikipedia.org/wiki/Relation_masse-rayon#.C3.89toiles_de_la_s.C3.A9quence_principale
