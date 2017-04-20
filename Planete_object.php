@@ -107,10 +107,10 @@ class Planete{
 		$this->distanceEtoile=384399000+6378137;
 		$this->masse=7.3477E22;
 		//https://fr.wikipedia.org/wiki/Vitesse_orbitale		
-		$m=$this->exp2int(7.3477E22); //masse de la lune
-		$M=$this->exp2int(5,9736E24); //masse de la terre
+		$m=maths_service::exp2int(7.3477E22); //masse de la lune
+		$M=maths_service::exp2int(5,9736E24); //masse de la terre
 		
-		$G=$this->exp2int(6.67408E-11); //constante de gravitation
+		$G=maths_service::exp2int(6.67408E-11); //constante de gravitation
 		$mu=bcmul($G,$m);
 		$V=sqrt(bcdiv($mu, $this->distanceEtoile,10));
 
@@ -137,13 +137,7 @@ class Planete{
 			return $randomfloat;
 	}
 
-	private function exp2int($exp) {
-		list($mantissa, $exponent) = explode("e", strtolower($exp));
-		if($exponent=='') return $exp;
-		list($int, $dec) = explode(".", $mantissa);
-		bcscale (abs($exponent-strlen($dec)));
-		return bcmul($mantissa, bcpow("10", $exponent));
-	}
+
 }
 
 ?>

@@ -12,9 +12,7 @@ class Star_object{
 	private $stellarObjectClassification=array('1'=>"Proto-étoile",'2'=>"géante ou supergéante rouge", '3'=>"Etoile à neutrons","4"=>"Trou noir",
 		'L'=>"naine brune",'D'=>"Naine blanche",'D2'=>"Naine blanche avec nébuleuse planétaire",'M'=>"naine rouge",
 		'K'=>"naine orange",'G'=>'naine jaune','F'=>"jaune/blanche",'A'=>"blanche",'B'=>"blanche/bleue",'O'=>"bleue");
-	
-	private $ageOfUniverse=13.4;
-	
+		
 	//les ages sont calculés en milliards d'années
 	
 	//durée de vie par masse: https://fr.wikipedia.org/wiki/%C3%89volution_stellaire
@@ -136,7 +134,7 @@ class Star_object{
 		$this->masseOrigine=maths_service::float_rand($this->massesByType[$this->typeOrigine]['min'],$this->massesByType[$this->typeOrigine]['max']);
 		
 		//détermination de son age
-		$this->age=maths_service::float_rand(0,$this->ageOfUniverse);
+		$this->age=maths_service::float_rand(0,Universe::$ageOfUniverse);
 		
 		//calcul de son état actuel selon son age:
 		foreach ($this->evolutionByType[$this->typeOrigine] as $periode){
@@ -222,8 +220,8 @@ class Star_object{
 
 	private function massRayonRelationWithSurcharge(){
 		switch($this->typeSurcharge){
-			case 4: //blackhole: lum 0
-				$this->rayon=0;
+			case 4: //blackhole: rayon = 0 (singularité) rayon = rayon de l'horizon des évenements
+				$this->massRayonRelationBlackHole();
 				break;
 			case 3: //neutronstar: lum 0
 				$this->rayon=maths_service::float_rand(15000, 30000);
@@ -246,10 +244,20 @@ class Star_object{
 		}
 	}
 	
+	/***
+	 * calcul le rayon de l'horizon des evenements d'un trou noir
+	 * @return string
+	 */
 	private function massRayonRelationBlackHole(){
 		//https://fr.wikipedia.org/wiki/Horizon_des_%C3%A9v%C3%A8nements
 		// R= (2GM)/c²
+		$masseSoleil='1.9891e30';
+		$masseSoleil=maths_service::exp2int($masseSoleil);
 		
+		$mu=bcmul(bcmul($this->masseOrigine,$masseSoleil), maths_service::exp2int(Universe::$G),4);
+		$R=bcdiv(bcmul($mu,2,4),pow(Universe::$c,2));
+		$this->rayon=$R;	
+		return $R;
 		
 	}
 	
