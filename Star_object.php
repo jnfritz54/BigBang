@@ -6,6 +6,9 @@ class Star_object{
 	private $etoileTypes=array('L'=>"naine brune",'M'=>"naine rouge",
 			'K'=>"naine orange",'G'=>'naine jaune','F'=>"jaune/blanche",'A'=>"blanche",'B'=>"blanche/bleue",'O'=>"bleue");
 	
+	public $hexaByTypeSurcharge=array('1'=>"#655555",'2'=>"#FF2020", '3'=>"#DD00DD","4"=>"#000000",
+		'L'=>"#201020",'D'=>"#EEFFEE",'D2'=>"#EEFFEE",'M'=>"#FF2020",
+		'K'=>"#FF9000",'G'=>'#EEEE00','F'=>"#FF9300",'A'=>"#FFFFFF",'B'=>"#AECBE1",'O'=>"#7BA7F3");
 	/***
 	 * classification personelle des objets stellaires permettant le mécanisme de surcharge de type
 	 */
@@ -68,7 +71,7 @@ class Star_object{
 	);
 	
 	private $massesByType=array(
-			"L"=>array("min"=>"0","max"=>"0.08"),
+			"L"=>array("min"=>"0.001","max"=>"0.08"),
 			"M"=>array("min"=>"0.08","max"=>"0.5"),
 			"K"=>array("min"=>"0.5","max"=>"0.8"),
 			"G"=>array("min"=>"0.8","max"=>"1.2"),
@@ -114,7 +117,7 @@ class Star_object{
 	public $rayon;
 	
 
-	public function __construct($systeme=null){
+	public function __construct($systeme=null,$multiple=false){
 			
 		//détermination de son type
 		$proba=rand(0,100);
@@ -168,9 +171,8 @@ class Star_object{
 
 	private function massLuminosityRelationWithSurcharge(){
 		switch($this->typeSurcharge){
-			case 4: //blackhole: lum 0
-				$this->rayonnement=0;
-				break;
+			case 'L': //brown dwarf, lum=0				
+			case 4: //blackhole: lum 0				
 			case 3: //neutronstar: lum 0
 				$this->rayonnement=0;
 				break;

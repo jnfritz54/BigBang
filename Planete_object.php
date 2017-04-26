@@ -43,7 +43,7 @@ class Planete{
 		'P'=>array("min"=>0.05,"max"=>0.3),
 	);
 	
-	private $particularitePlanete=array(50=>"aucune",70=>'lune',80=>'lunes multiples',90=>'anneaux',100=>'champ de débris');
+	private $particularitePlanete=array(50=>"aucune",70=>'lune',80=>'lunes multiples',90=>'anneaux',100=>'champ de debris');
 		
 	public $systeme;
 	
@@ -60,18 +60,31 @@ class Planete{
 	
 	public $particularite;
 	
-	public $distanceEtoile;
+	public $distanceEtoile; //exprimée en astrons (1as=300 000 000km)
+	
+	public $inclinaisonOrbite; //angle en degrées
 	
 	public $albedo;
 	
+	public $vitesseOrbitale;
+	
+	public $dureeAnnee;
+	
 	public $dureeJour;
+	
+	public $rayonnement; // rayonnement reçu à la surface en w/m²
 
-	public function __construct($systeme,$idObjetOrbited){
+	public function __construct($systeme,$idObjetOrbited,$masseObjetOrbited,$rayonnement,$rangPlanete){
+		
 		$type=maths_service::float_rand(0, count($this->naturePlanete)-1);
 		$arr=array_keys($this->naturePlanete);
 		$this->type=$arr[$type];
 		
-		$this->distanceEtoile=maths_service::float_rand(0, 0.8,7);
+		//$this->distanceEtoile=maths_service::probaDescendanteLineaire(0.05, 1500,4);
+		$this->distanceEtoile=maths_service::planetesLoiTitusBode($rangPlanete);
+		//echo $this->distanceEtoile."\n";
+		$this->inclinaisonOrbite=maths_service::probaDescendante(0, 20);
+		
 		$this->masse=maths_service::float_rand($this->massesParType[$this->type]['min'], $this->massesParType[$this->type]['max']);
 		
 		//détermination de sa particularité
@@ -83,9 +96,12 @@ class Planete{
 				continue;
 			}
 		}
+		$this->simplifiedCircularOrbit($masseObjetOrbited);
 		$this->systeme=$systeme;
 		$this->objectOrbited=$idObjetOrbited;
 		$this->albedo=maths_service::float_rand($this->albedoParType[$this->type]['min'], $this->albedoParType[$this->type]['max']);
+		
+		$this->rayonnement=bcdiv($rayonnement,bcmul($this->distanceEtoile,4*pi()),4);
 	}
 	
 	public function __toString(){
@@ -97,45 +113,39 @@ class Planete{
 	
 	public function __toSqlValues(){
 		return "('',".$this->systeme.",".$this->objectOrbited.",'".$this->type."','".$this->masse."','"
-				.$this->particularite."',".$this->distanceEtoile.",'".$this->dureeJour."','".$this->albedo."') ";
+				.$this->particularite."','".$this->distanceEtoile."','".$this->inclinaisonOrbite."','".$this->dureeAnnee."','".
+		$this->dureeJour."','".$this->albedo."','".$this->rayonnement."') ";
 	}
 	
-	public function simplifiedCircularOrbit(){
+	public function simplifiedCircularOrbit($masseObjetOrbited){
 		/**
 		 * données de test pour l'orbite de la lune autour de la terre
 		 */
-		$this->distanceEtoile=384399000+6378137;
-		$this->masse=7.3477E22;
+		//echo $masseObjetOrbited."\n";
+		
+		$distanceEtoileKM=bcmul($this->distanceEtoile, Universe::$astron,5);
 		//https://fr.wikipedia.org/wiki/Vitesse_orbitale		
-		$m=maths_service::exp2int(7.3477E22); //masse de la lune
-		$M=maths_service::exp2int(5,9736E24); //masse de la terre
+		$m=maths_service::exp2int(7.3477e+22); //masse de la lune
+		$M=bcmul(maths_service::exp2int(5.9736e+24),$masseObjetOrbited,4); //masse de la terre
 		
-		$G=maths_service::exp2int(6.67408E-11); //constante de gravitation
-		$mu=bcmul($G,$m);
-		$V=sqrt(bcdiv($mu, $this->distanceEtoile,10));
+		$G=maths_service::exp2int(Universe::$G); //constante de gravitation
+		$mu=bcmul($G,$M);
+		$V=sqrt(bcdiv($mu,$distanceEtoileKM,10));
 
-		echo "g: ".$G."\n";
-		echo "mu: ".$mu."\n";
-		echo "vitesse ".$V."\n";
-		$traject=bcmul(bcmul($this->distanceEtoile,2),pi());
-		echo "circonférence orbitale: ".$traject."\n";
+		//echo "mu: ".$mu."\n";
+		//echo "vitesse ".$V." (m/s)\n";
+		$this->vitesseOrbitale=$V;
+		if($V==0){ echo "dist: ".$distanceEtoileKM." ou ".$this->distanceEtoile." M: ".$M."\n";
+			echo $masseObjetOrbited;die;}
+		$traject=bcmul(bcmul($distanceEtoileKM,2),pi());
+		//echo "circonférence orbitale: ".$traject."\n";
 		
-		$dureeOrbite=bcdiv($traject,$V);
-		echo "durée orbite: ".$dureeOrbite."\n";
-		
+		$dureeOrbite=bcdiv($traject,bcdiv($V,1000,5)); //ajuster les unités (v en ms=>km/s)		
+		$dureeOrbite=bcdiv($dureeOrbite,3600);
+		$this->dureeAnnee=bcdiv($dureeOrbite, 24);
 		return $V;
 	}
-	
-	private function float_rand($Min, $Max, $round=4){
-		//validate input
-		if ($Min>$Max) { $min=$Max; $max=$Min; }
-		else { $min=$Min; $max=$Max; }
-		$randomfloat = $min + mt_rand() / mt_getrandmax() * ($max - $min);
-		if($round>0)
-			$randomfloat = round($randomfloat,$round);
-	
-			return $randomfloat;
-	}
+
 
 
 }
