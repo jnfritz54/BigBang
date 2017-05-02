@@ -12,14 +12,16 @@
 	$planeteInsert="insert into Planetes values ";
 	$planeteValues=array();
 	
+	
 	$mysqli=new MySQLi_2("localhost","root", "root", "perso");
 	
 	$i=1;
 	$cptStars=0;
-	while($i<=100000){
+	while($i<=1000){
 		$systeme=new Systeme();
 		$sysValues[]=$systeme->__toSqlValues();
-		$nbStars=rand(1,3);
+		$nbStars=1;//rand(1,3);
+		$contractionSysteme=0.5;//maths_service::float_rand(0,1,4); //contraction ou extention aléatoire du systeme
 		
 		$systemStars=array();
 		$stars=array();
@@ -68,7 +70,7 @@
 				}
 			}
 			//echo $i." ".$orbited."\n";
-			$planete=new Planete($i,$orbited,$masse,$rayonnement,$h);
+			$planete=new Planete($i,$orbited,$masse,$rayonnement,$h,$contractionSysteme);
 			$planeteValues[]=$planete->__toSqlValues();
 		}
 		
@@ -83,8 +85,10 @@
 	if(!empty($starValues)){
 		$requete=$starInsert.join(",",$starValues);
 		$mysqli->query($requete);
-		$requete=$sysInsert.join(", ",$sysValues).";";
-		$mysqli->query($requete);
+		if(!empty($sysValues)){
+			$requete=$sysInsert.join(", ",$sysValues).";";
+			$mysqli->query($requete);
+		}
 	}
 	if(!empty($planeteValues)){
 		$requete=$planeteInsert.join(", ",$planeteValues).";";

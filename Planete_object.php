@@ -74,14 +74,15 @@ class Planete{
 	
 	public $rayonnement; // rayonnement reçu à la surface en w/m²
 
-	public function __construct($systeme,$idObjetOrbited,$masseObjetOrbited,$rayonnement,$rangPlanete){
+	public function __construct($systeme,$idObjetOrbited,$masseObjetOrbited,$rayonnement,$rangPlanete,$contractionSysteme=0.5){
 		
 		$type=maths_service::float_rand(0, count($this->naturePlanete)-1);
 		$arr=array_keys($this->naturePlanete);
 		$this->type=$arr[$type];
 		
 		//$this->distanceEtoile=maths_service::probaDescendanteLineaire(0.05, 1500,4);
-		$this->distanceEtoile=maths_service::planetesLoiTitusBode($rangPlanete);
+		//$this->distanceEtoile=maths_service::planetesLoiTitusBode($rangPlanete);
+		$this->distanceEtoile=maths_service::planetesLoiTitusBodeExtanded($rangPlanete,$masseObjetOrbited,$contractionSysteme,false);
 		//echo $this->distanceEtoile."\n";
 		$this->inclinaisonOrbite=maths_service::probaDescendante(0, 20);
 		
