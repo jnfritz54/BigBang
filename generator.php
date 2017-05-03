@@ -17,10 +17,10 @@
 	
 	$i=1;
 	$cptStars=0;
-	while($i<=1000){
+	while($i<=1000000){
 		$systeme=new Systeme();
 		$sysValues[]=$systeme->__toSqlValues();
-		$nbStars=1;//rand(1,3);
+		$nbStars=rand(1,3);
 		$contractionSysteme=0.5;//maths_service::float_rand(0,1,4); //contraction ou extention aléatoire du systeme
 		
 		$systemStars=array();
