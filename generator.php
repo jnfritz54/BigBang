@@ -12,6 +12,7 @@
 	$planeteInsert="insert into Planetes values ";
 	$planeteValues=array();
 	
+	$probaNbEtoiles=array(50=>1,75=>2,95=>3,100=>4);
 	
 	$mysqli=new MySQLi_2("localhost","root", "root", "perso");
 	
@@ -20,14 +21,20 @@
 	while($i<=1000000){
 		$systeme=new Systeme();
 		$sysValues[]=$systeme->__toSqlValues();
-		$nbStars=rand(1,3);
+		$nbStars=1;
+		$testProba=rand(1,100);
+		foreach ($probaNbEtoiles as $proba=>$nombre){
+			if($testProba<=$proba){
+				$nbStars=$nombre;break;
+			}
+		}
 		$contractionSysteme=0.5;//maths_service::float_rand(0,1,4); //contraction ou extention aléatoire du systeme
 		
 		$systemStars=array();
 		$stars=array();
 		
 		for($j=0;$j<$nbStars;$j++){
-			$star=new Star_object($i);
+			$star=new Star_object($i,$nbStars>1);
 			
 			$starValues[]=$star->__toSqlValues();
 			$cptStars++;

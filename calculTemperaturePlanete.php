@@ -21,24 +21,35 @@ while($rowS=$resS->fetch_assoc()){
 calcul2(); //valeurs par défaut pour la terre
 calcul2(81472,1660945,2.00865e23); //valeurs pour le systeme TRAPPIST-1
 
-$sql="Select id,objectOrbited, distanceEtoile,albedo,systeme from Planetes where objectOrbited is not null";
+$sql="Select * from Planetes where objectOrbited is not null and type not in ('A','P')";
 $res=$mysqli->query($sql);
-$cpt=0;
-$cptEden=0;
+$cpt=0; //mondes survivables
+$cptHab=0; //mondes habitables
+$cptEden=0; //mondes habitables
 while($row=$res->fetch_assoc()){
 	
 	//on ne compte que celles qui sont en séquence principale
 	if($Stars[$row['objectOrbited']]['typeSurcharge']!=$Stars[$row['objectOrbited']]['typeOrigine']){continue;}
+	//on ne compte pas les ceintures d'astéroïdes
+	//if($row['type']=="A"){continue;}
+	//on ne compte pas les géantes gazeuses sans satellites
+	if($row['type']=="G" && ($row['particularite']=="aucune" || $row['particularite']=="anneaux")){continue;}
 	
 	$rayonKm=bcdiv($Stars[$row['objectOrbited']]['rayon'],1000);	
 	$tempC=calcul2($rayonKm,$row['distanceEtoile']*Universe::$astron,$Stars[$row['objectOrbited']]['rayonnement'],$row['albedo']);
 	
-	if($tempC>=-30 && $tempC<25 ){
+	if($tempC>=-30 && $tempC<20 ){
+		//planète relativement tempérée
 		//echo "Système: ".$row['systeme']." Planète: ".$row['id']." => ".$tempC."°C ( Age: ".$Stars[$row['objectOrbited']]['age'].")\n";
 		$cpt++;
-		if($tempC>=-20 && $tempC<10 && $Stars[$row['objectOrbited']]['age']>=1.5){
+		if($tempC>=-20 && $tempC<10 && $Stars[$row['objectOrbited']]['age']>=1){
+			//planète tempérée suffisement agée pour voir des formes de vie se dévelloper 
 			//echo "Système: ".$row['systeme']." Planète eden: ".$row['id']." => ".$tempC."°C ( Age: ".$Stars[$row['objectOrbited']]['age'].") \n";
-			$cptEden++;
+			$cptHab++;
+			if($Stars[$row['objectOrbited']]['age']>=2){
+				//planète tempérée suffisement agée pour voir des formes de vie et un écosysteme complexe 
+				$cptEden++; 
+			}
 		}
 	}
 	$sqlupdate="Update Planetes set rayonnement='".$tempC."' where id='".$row['id']."';";
@@ -51,8 +62,9 @@ $res=$mysqli->query($sql);
 $row=$res->fetch_assoc();
 var_dump($row);die;*/
 
-echo "\n ".$cpt." planètes potentiellement habitables";
-echo "\n dont ".$cptEden." planètes potentiellement eden\n";
+echo "\n ".$cpt." planètes potentiellement survivables";
+echo "\n dont ".$cptHab." planètes potentiellement habitables (anciennement eden)";
+echo "\n dont ".$cptEden." planètes potentiellement habitables avec biotope\n";
 
 function calcul2($rayonEtoile=696342,$orbitePlanete=149500000,$rayonnementEtoileBrut=3.826E26,$albedo=0.29){
 	$distance= $rayonEtoile+$orbitePlanete;
@@ -80,22 +92,4 @@ function calcul2($rayonEtoile=696342,$orbitePlanete=149500000,$rayonnementEtoile
 	
 }
 
-function calcul($rayonEtoile=696342,$orbitePlanete=149500000,$rayonnementEtoileBrut=3.826E26){
-	$distance= $rayonEtoile+$orbitePlanete;
-	$distance=$distance*1000;
-	$sphere=4*pow($distance,2);
-	//echo "4R² ".$sphere."\n";
-	$surface=maths_service::exp2int($sphere*pi());
-	//echo "surface: ".$surface."\n";
-	$production=maths_service::exp2int($rayonnementEtoileBrut);
-
-	//echo "production: ".$production."\n";
-	$rayonnement=bcdiv($production,$surface,4);
-	//$rayonnement-=$rayonnement*0.35; //albédo
-	$F=$rayonnement/4;
-	$T4=bcdiv($F,maths_service::exp2int(Universe::$StefanBoltzmann),4);
-	$TK=pow($T4,1/4);//température en kelvin
-	return round(maths_service::kelvin2celsius($TK),3);
-
-}
 ?>

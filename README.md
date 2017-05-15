@@ -2,7 +2,13 @@
 one little push that create a universe
 
 Current State:
-Create a customizable spiral galaxy with 4 arms and a central bulb
+Create a customizable spiral galaxy with 4 arms and a central bulb, fill systems with stars and planets.
+Can also determine whether a planet is in the habitable zone or not
+
+USAGE:
+1) Create database using bigbang.sql (update db logins in generator.php if necessary) 
+2) php generator.php : populate stars and planets
+3) php calculTemperaturePlanete.php : determine habitable planets
 
 ROADMAP
 

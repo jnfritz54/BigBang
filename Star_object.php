@@ -98,6 +98,8 @@ class Star_object{
 	
 	public $systeme=null;
 	
+	public $distanceBarycentre=0; //En astrons
+	
 	//type de l'étoile à sa création
 	public $typeOrigine=null;
 	
@@ -158,6 +160,11 @@ class Star_object{
 		$this->massLuminosityRelationWithSurcharge();
 		$this->massRayonRelationWithSurcharge();
 		
+		//positionnement artificiel:
+		if($multiple){
+			$this->distanceBarycentre=maths_service::float_rand(0.01, 15);
+		}
+		
 	}
 	
 	public function __toString(){
@@ -165,7 +172,7 @@ class Star_object{
 	}
 	
 	public function __toSqlValues(){
-		return "('','".$this->systeme."' ,'".$this->typeOrigine."','".$this->periodeActuelle."','".$this->typeSurcharge."',
+		return "('','".$this->systeme."' ,'".$this->distanceBarycentre."','".$this->typeOrigine."','".$this->periodeActuelle."','".$this->typeSurcharge."',
 				'".$this->age."','".$this->masseOrigine."','".$this->rayonnement."','".$this->rayon."') ";
 	}
 

@@ -43,7 +43,8 @@ class Planete{
 		'P'=>array("min"=>0.05,"max"=>0.3),
 	);
 	
-	private $particularitePlanete=array(50=>"aucune",70=>'lune',80=>'lunes multiples',90=>'anneaux',100=>'champ de debris');
+	private $particularitePlanete=array('0'=>"nothing",'M'=>'moon','Mm'=>'multiples moons','R'=>'rings','F'=>'debris field');
+	private $particulariteProba=array(50=>"0",70=>'M',80=>'Mm',90=>'R',100=>'F');
 		
 	public $systeme;
 	
@@ -90,7 +91,7 @@ class Planete{
 		
 		//détermination de sa particularité
 		$proba=rand(0,100);
-		foreach ($this->particularitePlanete as $range => $class){
+		foreach ($this->particulariteProba as $range => $class){
 			if($proba<=$range){
 				$this->particularite=$class;break;
 			}else{
@@ -146,6 +147,8 @@ class Planete{
 		$this->dureeAnnee=bcdiv($dureeOrbite, 24);
 		return $V;
 	}
+	
+	
 
 
 
