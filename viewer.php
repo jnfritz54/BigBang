@@ -1,9 +1,13 @@
-<?php 
+<?php
 namespace BigBang;
 
 require_once('MySQLi_2.php');
 
 $mysqli=new MySQLi_2("localhost","root", "root", "perso");
+
+$hexa=array('1'=>"#655555",'2'=>"#FF2020", '3'=>"#DD00DD","4"=>"#000000",
+		'L'=>"#201020",'D'=>"#EEFFEE",'D2'=>"#EEFFEE",'M'=>"#FF2020",
+		'K'=>"#FF9000",'G'=>'#EEEE00','F'=>"#FF9300",'A'=>"#FFFFFF",'B'=>"#AECBE1",'O'=>"#7BA7F3");
 
 $result=array();
 $offset=0;

@@ -4,7 +4,7 @@
 	include 'Systeme_object.php';
 	include 'Planete_object.php';
 	require_once('MySQLi_2.php');
-		
+	
 	$starInsert="insert into Stars values ";
 	$starValues=array();
 	$sysInsert="insert into Systemes values ";
@@ -12,22 +12,34 @@
 	$planeteInsert="insert into Planetes values ";
 	$planeteValues=array();
 	
+	$probaNbEtoiles=array(50=>1,75=>2,95=>3,100=>4);
+	
 	$mysqli=new MySQLi_2("localhost","root", "root", "perso");
 	
-	$i=0;
+	$i=1;
 	$cptStars=0;
-	while($i<1000000){
+	while($i<=1000000){
 		$systeme=new Systeme();
 		$sysValues[]=$systeme->__toSqlValues();
-		$nbStars=rand(1,3);
+		$nbStars=1;
+		$testProba=rand(1,100);
+		foreach ($probaNbEtoiles as $proba=>$nombre){
+			if($testProba<=$proba){
+				$nbStars=$nombre;break;
+			}
+		}
+		$contractionSysteme=0.5;//maths_service::float_rand(0,1,4); //contraction ou extention aléatoire du systeme
 		
 		$systemStars=array();
+		$stars=array();
 		
 		for($j=0;$j<$nbStars;$j++){
-			$star=new Star_object($i);
+			$star=new Star_object($i,$nbStars>1);
+			
 			$starValues[]=$star->__toSqlValues();
 			$cptStars++;
 			$systemStars[$j]=$cptStars;
+			$stars[$cptStars]=$star;
 			if($i%500==0 && !empty($starValues) && !empty($sysValues)){
 				$requete=$starInsert.join(", ",$starValues).";";
 				$mysqli->query($requete);
@@ -39,17 +51,33 @@
 
 		$nbPlanets=rand(1,15);
 		for($h=0;$h<$nbPlanets;$h++){
-			$orbited=null;			
+			$orbited=null;	
+			$masse=0;
+			$rayonnement=0;
 			if(count($systemStars)==1){
 				//si système unique, l'objet orbité est automatiquement l'étoile
 				$orbited=$systemStars[0];
+				$masse=$stars[$orbited]->masseOrigine;
+				$rayonnement=$stars[$orbited]->rayonnement;
 			}else{
 				//sinon cela peut-être l'une des étoiles ou le centre de gravité du système (null)
-				$systemStars[]='null';
+				if(!in_array('null', $systemStars)){$systemStars[]='null';}
 				$orbited=$systemStars[rand(0,count($systemStars)-1)];
+				if($orbited=='null'){					
+					foreach ($systemStars as $s){
+						if($s=='null'){continue;}
+						$rayonnement+=$stars[$s]->rayonnement;
+					}
+										
+				}else{
+					$rayonnement=$stars[$orbited]->rayonnement;
+				}
+				foreach ($stars as $s){
+					$masse+=$s->masseOrigine;
+				}
 			}
 			//echo $i." ".$orbited."\n";
-			$planete=new Planete($i,$orbited);
+			$planete=new Planete($i,$orbited,$masse,$rayonnement,$h,$contractionSysteme);
 			$planeteValues[]=$planete->__toSqlValues();
 		}
 		
@@ -64,8 +92,10 @@
 	if(!empty($starValues)){
 		$requete=$starInsert.join(",",$starValues);
 		$mysqli->query($requete);
-		$requete=$sysInsert.join(", ",$sysValues).";";
-		$mysqli->query($requete);
+		if(!empty($sysValues)){
+			$requete=$sysInsert.join(", ",$sysValues).";";
+			$mysqli->query($requete);
+		}
 	}
 	if(!empty($planeteValues)){
 		$requete=$planeteInsert.join(", ",$planeteValues).";";

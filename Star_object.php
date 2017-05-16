@@ -6,15 +6,16 @@ class Star_object{
 	private $etoileTypes=array('L'=>"naine brune",'M'=>"naine rouge",
 			'K'=>"naine orange",'G'=>'naine jaune','F'=>"jaune/blanche",'A'=>"blanche",'B'=>"blanche/bleue",'O'=>"bleue");
 	
+	public $hexaByTypeSurcharge=array('1'=>"#655555",'2'=>"#FF2020", '3'=>"#DD00DD","4"=>"#000000",
+		'L'=>"#201020",'D'=>"#EEFFEE",'D2'=>"#EEFFEE",'M'=>"#FF2020",
+		'K'=>"#FF9000",'G'=>'#EEEE00','F'=>"#FF9300",'A'=>"#FFFFFF",'B'=>"#AECBE1",'O'=>"#7BA7F3");
 	/***
 	 * classification personelle des objets stellaires permettant le mécanisme de surcharge de type
 	 */
 	private $stellarObjectClassification=array('1'=>"Proto-étoile",'2'=>"géante ou supergéante rouge", '3'=>"Etoile à neutrons","4"=>"Trou noir",
 		'L'=>"naine brune",'D'=>"Naine blanche",'D2'=>"Naine blanche avec nébuleuse planétaire",'M'=>"naine rouge",
 		'K'=>"naine orange",'G'=>'naine jaune','F'=>"jaune/blanche",'A'=>"blanche",'B'=>"blanche/bleue",'O'=>"bleue");
-	
-	private $ageOfUniverse=13.4;
-	
+		
 	//les ages sont calculés en milliards d'années
 	
 	//durée de vie par masse: https://fr.wikipedia.org/wiki/%C3%89volution_stellaire
@@ -70,7 +71,7 @@ class Star_object{
 	);
 	
 	private $massesByType=array(
-			"L"=>array("min"=>"0","max"=>"0.08"),
+			"L"=>array("min"=>"0.001","max"=>"0.08"),
 			"M"=>array("min"=>"0.08","max"=>"0.5"),
 			"K"=>array("min"=>"0.5","max"=>"0.8"),
 			"G"=>array("min"=>"0.8","max"=>"1.2"),
@@ -97,6 +98,8 @@ class Star_object{
 	
 	public $systeme=null;
 	
+	public $distanceBarycentre=0; //En astrons
+	
 	//type de l'étoile à sa création
 	public $typeOrigine=null;
 	
@@ -116,7 +119,7 @@ class Star_object{
 	public $rayon;
 	
 
-	public function __construct($systeme=null){
+	public function __construct($systeme=null,$multiple=false){
 			
 		//détermination de son type
 		$proba=rand(0,100);
@@ -136,7 +139,7 @@ class Star_object{
 		$this->masseOrigine=maths_service::float_rand($this->massesByType[$this->typeOrigine]['min'],$this->massesByType[$this->typeOrigine]['max']);
 		
 		//détermination de son age
-		$this->age=maths_service::float_rand(0,$this->ageOfUniverse);
+		$this->age=maths_service::float_rand(0,Universe::$ageOfUniverse);
 		
 		//calcul de son état actuel selon son age:
 		foreach ($this->evolutionByType[$this->typeOrigine] as $periode){
@@ -157,6 +160,11 @@ class Star_object{
 		$this->massLuminosityRelationWithSurcharge();
 		$this->massRayonRelationWithSurcharge();
 		
+		//positionnement artificiel:
+		if($multiple){
+			$this->distanceBarycentre=maths_service::float_rand(0.01, 15);
+		}
+		
 	}
 	
 	public function __toString(){
@@ -164,15 +172,14 @@ class Star_object{
 	}
 	
 	public function __toSqlValues(){
-		return "('','".$this->systeme."' ,'".$this->typeOrigine."','".$this->periodeActuelle."','".$this->typeSurcharge."',
+		return "('','".$this->systeme."' ,'".$this->distanceBarycentre."','".$this->typeOrigine."','".$this->periodeActuelle."','".$this->typeSurcharge."',
 				'".$this->age."','".$this->masseOrigine."','".$this->rayonnement."','".$this->rayon."') ";
 	}
 
 	private function massLuminosityRelationWithSurcharge(){
 		switch($this->typeSurcharge){
-			case 4: //blackhole: lum 0
-				$this->rayonnement=0;
-				break;
+			case 'L': //brown dwarf, lum=0				
+			case 4: //blackhole: lum 0				
 			case 3: //neutronstar: lum 0
 				$this->rayonnement=0;
 				break;
@@ -222,8 +229,8 @@ class Star_object{
 
 	private function massRayonRelationWithSurcharge(){
 		switch($this->typeSurcharge){
-			case 4: //blackhole: lum 0
-				$this->rayon=0;
+			case 4: //blackhole: rayon = 0 (singularité) rayon = rayon de l'horizon des évenements
+				$this->massRayonRelationBlackHole();
 				break;
 			case 3: //neutronstar: lum 0
 				$this->rayon=maths_service::float_rand(15000, 30000);
@@ -244,6 +251,23 @@ class Star_object{
 				break;
 		
 		}
+	}
+	
+	/***
+	 * calcul le rayon de l'horizon des evenements d'un trou noir
+	 * @return string
+	 */
+	private function massRayonRelationBlackHole(){
+		//https://fr.wikipedia.org/wiki/Horizon_des_%C3%A9v%C3%A8nements
+		// R= (2GM)/c²
+		$masseSoleil='1.9891e30';
+		$masseSoleil=maths_service::exp2int($masseSoleil);
+		
+		$mu=bcmul(bcmul($this->masseOrigine,$masseSoleil), maths_service::exp2int(Universe::$G),4);
+		$R=bcdiv(bcmul($mu,2,4),pow(Universe::$c,2));
+		$this->rayon=$R;	
+		return $R;
+		
 	}
 	
 	private function massRayonRelationSequencePrincipale(){
