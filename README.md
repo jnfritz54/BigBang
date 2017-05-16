@@ -7,21 +7,29 @@ Can also determine whether a planet is in the habitable zone or not
 
 USAGE:
 1) Create database using bigbang.sql (update db logins in generator.php if necessary) 
-2) php generator.php : populate stars and planets
-3) php calculTemperaturePlanete.php : determine habitable planets
+2) php launcher : populate stars and planets, determine habitable planets
 
 ROADMAP
 
 Step 1: - pending create populated places in a universe 
+
 a) generate random stars (statisticaly equivalent as in our galaxy) -- done --
+
 b) add a galactic structure similar to reality -- done --
+
 b) generate random planets -- done --
-c) generate complete stellar system (1,n stars + 0,n planets) -- pending --
+
+c) generate complete stellar system (1,n stars + 0,n planets) -- done --
+
 d) generate random sentient races
 
+
 Step 2: integration of habitable zones for stars 
+
 a) planetary temperature estimation -- done --
-b) mark habitable planets
+
+b) mark habitable planets - done --
+
 c) use it to alter population generation
 
 Addendum:
