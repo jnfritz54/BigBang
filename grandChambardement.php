@@ -12,10 +12,26 @@
 
 	$mysqli=new MySQLi_2("localhost","root", "root", "perso");
 	
+	$cptDelete=0;
+	$cptUpdate=0;
+	
+//on va devoir fonctionner par tranches de 100-200 000 systemes
+//si on essaye de prendre le million on mange un kill-9 systeme
+$debut=0;
+$pas=100000;
+
+$sqlCountSys="select id from Systemes order by id DESC limit 1;";
+$resCountSys=$mysqli->query($sqlCountSys);
+$sys=$resCountSys->fetch_assoc();
+$fin=$sys['id'];
+
+while($debut<$fin){
+	$limit=$debut+$pas;
+	echo $debut." => ".$limit."\n";
 	/***
 	 *caching Systemes/stars
 	 */
-	$sqlCache="Select * from Stars where systeme <100000;";
+	$sqlCache="Select * from Stars where systeme>='".$debut."' and systeme<'".$limit."';";
 	$sysStars=array();
 	$stars=array();
 	$resCache=$mysqli->query($sqlCache);
@@ -30,7 +46,7 @@
 	 * caching planetes
 	 */
 	$planetes=array();
-	$sqlCacheP="Select * from Planetes where systeme <100000;";
+	$sqlCacheP="Select * from Planetes where systeme>='".$debut."' and systeme<'".$limit."';";
 	$resCacheP=$mysqli->query($sqlCacheP);
 	while($p=$resCacheP->fetch_assoc()){
 		if(!isset($planetes[$p['systeme']])){$planetes[$p['systeme']]=array();}
@@ -52,8 +68,7 @@
 	echo "Cache done\n";
 
 	$sqlDelete="";
-	$cptDelete=0;
-	$cptUpdate=0;
+	
 	foreach ($sysStars as $idSys=>$array){
 		if($array==null){ echo "null \n";continue;}
 		
@@ -91,13 +106,12 @@
 					$cptDelete++;
 					//echo " - delete2";
 				}
-			}else{
-				//echo "-rien";
 			}
 			
 		}
 		
-	}
-	
+	}	
+	$debut+=$pas;
+}	
 	echo $cptDelete." suppressions et ".$cptUpdate." modifications d'orbite \n";
 ?>

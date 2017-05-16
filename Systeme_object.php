@@ -64,7 +64,9 @@ class Systeme{
 			case "bulbe":				
 				$this->angle=maths_service::float_rand(0,360,4);
 				
-				$distanceBrute=maths_service::probaDescendante(1,galaxy::$rayonMin,4);				
+				//on inverse la proba descendante pour tenir compte de la répartition en boule
+				$distanceBrute=bcsub(galaxy::$rayonMin,maths_service::probaDescendante(1,galaxy::$rayonMin,4));
+				
 				//version 1: théorème de pythagore AB²=AC²+BC²
 				$ab2=bcmul($distanceBrute,$distanceBrute);
 				$bc=maths_service::float_rand(0, $distanceBrute,4);
