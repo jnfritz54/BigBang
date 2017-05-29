@@ -108,7 +108,9 @@ class Systeme{
 		}
 		//correctif pour les bras notamment
 		if($this->angle>360){
-			$this->angle=($this->angle%360)+360;
+			$tmpangle=bcdiv($this->angle,360,8);
+			$this->angle=bcmul(bcsub( $tmpangle, floor($tmpangle)) , 360)+360;
+			
 		}
 		
 	}
