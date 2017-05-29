@@ -67,6 +67,12 @@ abstract class maths_service{
 		return array("x"=>$x,"y"=>$y);
 	}
 	
+	static function cartesienToPolaire($x,$y){
+		$rayon=sqrt(bcadd(pow($x,2), pow($y,2),4));
+		$angle=rad2deg(atan(bcdiv($y,$x,4)));
+		return array("rayon"=>$rayon,"angle"=>$angle);
+	}
+	
 	static function exp2int($exp) {
 		if(!strstr(strtolower($exp), 'e')){return $exp;}
 		list($mantissa, $exponent) = explode("e", strtolower($exp));

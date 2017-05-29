@@ -48,16 +48,19 @@ class Systeme{
 				$brasIndex=rand(0,count(galaxy::$bras)-1);
 				//$this->angle=maths_service::float_rand(galaxy::$angleMin,galaxy::$bras[$brasIndex]['ouverture'],4);
 				$this->angle=maths_service::probaDescendante(galaxy::$angleMin,galaxy::$bras[$brasIndex]['ouverture'],4);
-				
+
 				//calcul de la distance moyenne pour être dans un bras à l'angle donné
 				//en considérant qu'un bras atteind la bordure en un tour complet (à vérifier)
 				$distanceMoyenne=bcmul(galaxy::$rayonMax, bcdiv($this->angle,galaxy::$bras[$brasIndex]['ouverture'],4),4);
 				$distanceMin=$distanceMoyenne-(galaxy::$epaisseurBras/2);
 				$distanceFinale=$distanceMoyenne+maths_service::float_rand(0,galaxy::$epaisseurBras,2);
 				
+				$this->name="bras";
+				
 				//$this->distance=$distanceFinale;
 				$this->distance=$distanceFinale;
 				$this->angle+=galaxy::$bras[$brasIndex]['angle'];
+			
 				break;
 			
 			//le bulbe contient 5 à 10% des étoiles
@@ -103,7 +106,10 @@ class Systeme{
 				$this->distance=maths_service::probaDescendante(galaxy::$rayonMin,galaxy::$rayonMax,2);
 				break;	
 		}
-		
+		//correctif pour les bras notamment
+		if($this->angle>360){
+			$this->angle=($this->angle%360)+360;
+		}
 		
 	}
 	
