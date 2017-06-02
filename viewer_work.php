@@ -35,10 +35,10 @@ while($offset<1000000){
 		$tmp['x']=intval($tmp['x']/(50000/400));		
 		$tmp['y']=intval($tmp['y']/(50000/400));
 		$tmp['z']=intval($row['altitude']/(50000/400));
-		if($_GET['view']=='side'){
-			imagesetpixel($image, ($tmp['x']+400),($tmp['y']+400), $orange);
-		}elseif($_GET['view']=='top'){
-			imagesetpixel($image, ($tmp['y']+400),($tmp['z']+400), $jaune);
+		if($_GET['view']=='top'){
+			imagesetpixel($image, ($tmp['x']+400),($tmp['y']+400), $jaune);
+		}elseif($_GET['view']=='side'){
+			imagesetpixel($image, ($tmp['y']+400),($tmp['z']+400), $orange);
 		}
 		
 		$cpt++;
@@ -46,6 +46,8 @@ while($offset<1000000){
 	$offset+=$pas;
 }
 imagepng($image);
+imagepng($image,"./views/view_".$_GET['view'].".png");
+
 function polaireToCartesien($rayon,$angle){
 	$x=$rayon*cos(deg2rad($angle));
 	$y=$rayon*sin(deg2rad($angle));

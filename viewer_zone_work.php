@@ -105,6 +105,7 @@ if(!empty($_GET)){
 		
 	
 	}
+	imagepng($image,"./views/view_zone.png");
 }else{
 	imagestring($image, 4, 400, 0, "Waiting for coordinates", $blanc);
 }

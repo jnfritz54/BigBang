@@ -34,5 +34,5 @@ c) use it to alter population generation
 
 Addendum:
 a) generate galactic viewer --done--
-b) generate group viewer
+b) generate group viewer --done--
 c) generate system viewer --pending--

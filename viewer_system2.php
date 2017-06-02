@@ -32,7 +32,7 @@ $result=array('S'=>array(),'P'=>array());
 if(isset($_GET['id'])){
 	$idSysteme=intval($_GET['id']);
 }else{
-	$idSysteme=0;
+	$idSysteme=1;
 }
 
 $sqlStars="select * from Stars where systeme=".$idSysteme.";";

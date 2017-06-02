@@ -39,20 +39,21 @@ $git=sprintf('v %s <br/> du %s',  $commitHash, $commitDate->format('Y-m-d H:m:s'
 <head>
 <title>Index Projet BigBang</title>
 <style>
-	body{background-color:black;color:white;height:100%;}
+	body{background-color:#101010;color:white;height:100%;}
 	a{color:yellow}
 	a:hover{color:orange}
 	.colone{
 		width:30%;
-		background-color:#101010;
+		background-color:#000000;
 		border-radius:10px;
 		border: 1px solid #101010;
 		box-shadow:0px 0px 7px 5px #999999 ;
 		margin-left: 1%;
 		margin-right: 1%;
+		margin-bottom: 2%;
 		padding-left:15px;}
 	#header{
-		background-color:#101010;
+		background-color:#000000;
 		margin: 25px;
 		margin-left: 2%;
 		margin-right: 2%;
@@ -63,7 +64,7 @@ $git=sprintf('v %s <br/> du %s',  $commitHash, $commitDate->format('Y-m-d H:m:s'
 		text-align:center
 	}
 	.footer{
-		background-color:#101010;
+		background-color:#000000;
 		margin: 25px;
 		margin-left: 2%;
 		margin-right: 2%;
@@ -79,13 +80,18 @@ $git=sprintf('v %s <br/> du %s',  $commitHash, $commitDate->format('Y-m-d H:m:s'
 <body>
 	<div>
 	<div id='header' style=''><h2>Index R&eacute;sum&eacute; du projet BigBang</h2></div>
+	<div id='header' style=''>
+		<img alt="Side" src="./views/view_side.png" width="300px" height="300px">
+		<img alt="Top" src="./views/view_top.png" width="300px" height="300px" >		
+		<img alt="Local" src="./views/view_zone.png" width="300px" height="300px">
+	</div>
 	<div id='content' style='margin:1%;'>
 		<div id='liens' class="colone" style='float:left;'>
 			<h3> Acces aux vues</h3>
 			<dl>
 				<dt><a href="./viewer.php">Vue galactique</a></dt>
 				<dt><a href="./viewer_zone.php">Vue partielle</a></dt>
-				<dt><a href="./viewer_system2.php">Vue systeme</a></dt>
+				<dt><a href="./viewer_system.php">Vue systeme</a></dt>
 			</dl>
 			
 			<h3> Versioning</h3>
