@@ -85,7 +85,7 @@ $git=sprintf('v %s <br/> du %s',  $commitHash, $commitDate->format('Y-m-d H:m:s'
 		<img alt="Top" src="./views/view_top.png" width="300px" height="300px" >		
 		<img alt="Local" src="./views/view_zone.png" width="300px" height="300px">
 	</div>
-	<div id='content' style='margin:1%;'>
+	<div id='content' style='margin:1%'>
 		<div id='liens' class="colone" style='float:left;'>
 			<h3> Acces aux vues</h3>
 			<dl>

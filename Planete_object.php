@@ -57,6 +57,8 @@ class Planete{
 	
 	public $type;
 	
+	public $sousCategorie;
+	
 	public $masse;
 	
 	public $particularite;

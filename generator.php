@@ -57,6 +57,13 @@
 			if(count($systemStars)==1){
 				//si système unique, l'objet orbité est automatiquement l'étoile
 				$orbited=$systemStars[0];
+				
+				//pas de planète sur les étoiles uniques post-supernova
+				//idem pour les disques protoplanétaires qui n'ont pas encore fini leur formation
+				if(in_array($stars[$orbited]->typeSurcharge, array(3,4,1)) ){
+					$nbPlanets=0;
+					break;
+				}
 				$masse=$stars[$orbited]->masseOrigine;
 				$rayonnement=$stars[$orbited]->rayonnement;
 			}else{
