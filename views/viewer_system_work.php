@@ -1,9 +1,9 @@
 <?php
 namespace BigBang;
 require_once('../MySQLi_2.php');
-require('../loader.php');
+require_once('../loader.php');
 
-//header("Content-type: image/png");
+header("Content-type: image/png");
 $image= imagecreate(1200, 1200);
 
 $noir = imagecolorallocate($image, 0, 0, 0);
@@ -52,7 +52,7 @@ $resStar=$mysqli->query($sqlStars);
 $cpt=0;
 while($star=$resStar->fetch_assoc()){
 		
-	$stars[$star['id']]=array('rayonAs'=>$star['rayon']/Universe::$astron,
+	$stars[$star['id']]=array('rayonAs'=>$star['rayon']/ Universe::$astron, 
 		'distance'=>$star['distanceBarycentre'],'couleur'=>$hexaByTypeSurcharge[$star['typeSurcharge']]
 	);
 	$cpt++;

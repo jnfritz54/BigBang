@@ -1,7 +1,9 @@
 <?php 
 //a chaque appel d'une classe non chargée on passera par ici
 function __autoload($class) {
-	$parts = preg_split('#\\\#', $class);	
+	$rootDir="/var/www/html/perso/bigbang/";
+	$parts = preg_split('#\\\#', $class);
+	
 	// on extrait le dernier element
 	$classname = array_pop($parts);	
 	
@@ -10,13 +12,14 @@ function __autoload($class) {
 	
 	
 	if(ereg("service", $classname)){
-		$filename = "./services/". $classname .".php";
+		$filename = $rootDir."services/". $classname .".php";
 	}else{
-		$filename = "./objects/". $classname ."_object.php";
+		$filename = $rootDir."objects/". $classname ."_object.php";
 	}
 
 	if(!file_exists($filename)){
-		throw new Exception("class not found ".$filename." (".$class.")");
+		
+		throw new Exception("Class definition file not found ".$filename." in ".basename(__DIR__) ."");
 	}
 	include_once($filename);
 }

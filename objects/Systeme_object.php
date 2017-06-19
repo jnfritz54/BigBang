@@ -100,7 +100,7 @@ class Systeme{
 			case "partout":
 			default:
 				
-				$this->angle=maths_service::float_rand(0,60,4);
+				$this->angle=maths_service::float_rand(0,360,4);
 				//$this->distance=maths_service::float_rand(Galaxy::$rayonMin,Galaxy::$rayonMax,2);
 				$this->distance=maths_service::probaDescendante(Galaxy::$rayonMin,Galaxy::$rayonMax,2);
 				break;	
