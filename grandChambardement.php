@@ -1,13 +1,14 @@
-<?php 
+<?php
 	namespace BigBang;
 	
 	/******************************************
 	 * Rectifie les orbites dans les systemes *
 	 * à étoiles multiples                    *
-	 ******************************************/
+	 *****************************************
 	include 'Star_object.php';
 	include 'Systeme_object.php';
-	include 'Planete_object.php';
+	include 'Planete_object.php';*/
+	require_once 'loader.php';
 	require_once('MySQLi_2.php');
 
 	$mysqli=new MySQLi_2("localhost","root", "root", "perso");

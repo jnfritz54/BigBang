@@ -27,6 +27,6 @@ echo "End ".$time->format("H:i:s")."\n";
 /*
  une fois tout ca généré pour trouver une planète semblable à la terre:
   SELECT * FROM `Planetes` WHERE `type`='T' and `masse` <1.1 and `masse`>0.9 and 
- `particularite`="m" and`inclinaisonOrbite`<5 and `rayonnement` >-20 and `rayonnement` <15 and `rayonnement`!=0
+ `particularite`="m" and`inclinaisonOrbite`<5 and `rayonnement` >-10 and `rayonnement` <10 and `rayonnement`!=0
  */
 ?>

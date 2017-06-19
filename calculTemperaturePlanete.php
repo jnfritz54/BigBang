@@ -5,9 +5,7 @@ namespace BigBang;
  * à lancer après le generator
  */
 
-include 'Star_object.php';
-include 'Systeme_object.php';
-include 'Planete_object.php';
+require_once 'loader.php';
 require_once('MySQLi_2.php');
 
 $mysqli=new MySQLi_2("localhost","root", "root", "perso");
@@ -18,6 +16,9 @@ $mysqli=new MySQLi_2("localhost","root", "root", "perso");
 $debut=0;
 $pas=100000;
 
+$sqlResetEden="Update Planetes set eden=0 where eden=1;";
+$resResetEden=$mysqli->query($sqlResetEden);
+
 $sqlCountSys="select id from Systemes order by id DESC limit 1;";
 $resCountSys=$mysqli->query($sqlCountSys);
 $sys=$resCountSys->fetch_assoc();
@@ -25,9 +26,9 @@ $fin=$sys['id'];
 
 while($debut<$fin){
 	$limit=$debut+$pas;
-	echo $debut." => ".$limit."\n";
+	//echo $debut." => ".$limit."\n";
 		
-	$sqlStars="select * from Stars where systeme>='".$debut."' and systeme<'".$limit."';";
+	$sqlStars="select s.* from Stars s where  s.systeme>='".$debut."' and s.systeme<'".$limit."';";
 	$Stars=array();
 	$resS=$mysqli->query($sqlStars);
 	while($rowS=$resS->fetch_assoc()){
@@ -38,16 +39,17 @@ while($debut<$fin){
 	calcul2(81472,1660945,2.00865e23); //valeurs pour le systeme TRAPPIST-1
 	*/
 	
-	
+
 	//pour gagner du temps on ne compte pas les géantes gazeuses sans satellites,
 	//ni les planétoides trop petits pour avoir une atmosphère, ni les ceintures d'astéroides
-	$sql="Select * from Planetes where systeme>='".$debut."' and systeme<'".$limit."' and objectOrbited is not null and (type not in ('A','P','G') or (type='G' and (particularite='m' or particularite='Mm')) )";
+	$sql="Select p.* from Planetes p, Systemes sy where sy.id=p.systeme and sy.distance>'".Galaxy::$rayonMin."' and p.systeme>='".$debut."' and p.systeme<'".$limit."' and p.objectOrbited is not null and (type not in ('A','P','G') or (type='G' and (particularite='m' or particularite='Mm')) )";
 	$res=$mysqli->query($sql);
 	$cpt=0; //mondes survivables
 	$cptHab=0; //mondes habitables
 	$cptEden=0; //mondes habitables
+	
 	while($row=$res->fetch_assoc()){
-		
+		$eden=0;
 		//on ne compte que celles qui sont en séquence principale, celles en formation n'ont pas encore de planètes créées, et celles qui ont dépassé
 		//ce stade ne peuvent plus abriter la vie
 		if($Stars[$row['objectOrbited']]['typeSurcharge']!=$Stars[$row['objectOrbited']]['typeOrigine']){continue;}
@@ -67,10 +69,18 @@ while($debut<$fin){
 						&& ($row['particularite']=="m" || $row['particularite']=="Mm")){
 					//planète tempérée suffisement agée et stable pour voir des formes de vie et un écosysteme complexe 
 					$cptEden++; 
+					$eden=1;
+					$sqlupdate="Update Planetes set rayonnement='".$tempC."', eden=1 where id='".$row['id']."';";
+				}else{
+					$sqlupdate="Update Planetes set rayonnement='".$tempC."', eden=0 where id='".$row['id']."';";
 				}
+			}else{
+				$sqlupdate="Update Planetes set rayonnement='".$tempC."', eden=0 where id='".$row['id']."';";
 			}
+		}else{
+			$sqlupdate="Update Planetes set rayonnement='".$tempC."', eden=0 where id='".$row['id']."';";
 		}
-		$sqlupdate="Update Planetes set rayonnement='".$tempC."' where id='".$row['id']."';";
+		//$sqlupdate="Update Planetes set rayonnement='".$tempC."', eden='".$eden."' where id='".$row['id']."';";
 		$resUpdate=$mysqli->query($sqlupdate);
 		
 	}

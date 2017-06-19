@@ -1,8 +1,6 @@
 <?php 
 	namespace BigBang;
-	include 'Star_object.php';
-	include 'Systeme_object.php';
-	include 'Planete_object.php';
+	require_once 'loader.php';
 	require_once('MySQLi_2.php');
 	
 	$starInsert="insert into Stars values ";
@@ -34,7 +32,7 @@
 		$stars=array();
 		
 		for($j=0;$j<$nbStars;$j++){
-			$star=new Star_object($i,$nbStars>1);
+			$star=new Star($i,$nbStars>1);
 			
 			$starValues[]=$star->__toSqlValues();
 			$cptStars++;

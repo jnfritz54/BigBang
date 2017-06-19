@@ -26,6 +26,11 @@ $resPl=$mysqli->query($sqlPlanetes);
 $tmp=$resPl->fetch_assoc();
 $cptPlanetes=$tmp['cpt'];
 
+$sqlLifeforms="select count(*) as cpt from Lifeforms;";
+$resLf=$mysqli->query($sqlLifeforms);
+$tmp=$resLf->fetch_assoc();
+$cptLifeForms=$tmp['cpt'];
+
 //infos versionning 
 $commitHash = trim(exec('git log --pretty="%h" -n1 HEAD'));
 
@@ -82,14 +87,16 @@ $git=sprintf('v %s <br/> du %s',  $commitHash, $commitDate->format('Y-m-d H:m:s'
 	<div id='header' style=''><h2>Index R&eacute;sum&eacute; du projet BigBang</h2></div>
 	<div id='header' style=''>
 		<img alt="Side" src="./views/view_side.png" width="300px" height="300px">
-		<img alt="Top" src="./views/view_top.png" width="300px" height="300px" >		
+		<img alt="Top" src="./views/view_top.png" width="300px" height="300px" >
+		<img alt="Lifeform" src="./views/view_lifeforms.png" width="300px" height="300px" >		
 		<img alt="Local" src="./views/view_zone.png" width="300px" height="300px">
 	</div>
 	<div id='content' style='margin:1%'>
 		<div id='liens' class="colone" style='float:left;'>
 			<h3> Acces aux vues</h3>
 			<dl>
-				<dt><a href="./viewer.php">Vue galactique</a></dt>
+				<dt><a href="./viewer.html">Vue galactique</a></dt>
+				<dt><a href="./viewer_lifeforms.html">Vue vie</a></dt>
 				<dt><a href="./viewer_zone.php">Vue partielle</a></dt>
 				<dt><a href="./viewer_system.php">Vue systeme</a></dt>
 			</dl>
@@ -105,6 +112,7 @@ $git=sprintf('v %s <br/> du %s',  $commitHash, $commitDate->format('Y-m-d H:m:s'
 				<dt><?php echo $cptStars;?> Etoiles</dt>
 				<dt><?php echo $cptStars2;?> Etoiles en s&eacute;quence principale</dt>
 				<dt><?php echo $cptPlanetes;?> Planetes</dt>
+				<dt><?php echo $cptLifeForms;?> Formes de vie intelligentes</dt>
 			</dl>
 			Soit en moyenne:
 			<dl>
