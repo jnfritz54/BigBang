@@ -1,9 +1,7 @@
 <?php
 namespace BigBang;
-require_once('MySQLi_2.php');
-include 'Universe_object.php';
-include 'Star_object.php';
-require('./maths_service.php');
+require_once('../MySQLi_2.php');
+require('../loader.php');
 header("Content-type: image/png");
 $image= imagecreate(800, 800);
 
@@ -44,13 +42,13 @@ $offset=0;
 		$cpt++;
 	}
 imagepng($image);
-imagepng($image,"./views/view_lifeforms.png");
+imagepng($image,"./img/view_lifeforms.png");
 
-if(file_exists('./views/view_top.png')){
-	$baseImage = imagecreatefrompng('./views/view_top.png');
+if(file_exists('./img/view_top.png')){
+	$baseImage = imagecreatefrompng('./img/view_top.png');
 	imagecolortransparent($baseImage, $noir);
 	imagecopymerge($baseImage, $image, 0, 0, 0, 0, 800, 800, 100);
-	imagepng($baseImage,"./views/view_mixed.png");
+	imagepng($baseImage,"./img/view_mixed.png");
 	
 	
 }

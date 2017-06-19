@@ -1,6 +1,5 @@
 <?php 
 namespace BigBang;
-include 'Universe_object.php';
 
 /**
  * classe abstraite (pour le moment)

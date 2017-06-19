@@ -1,9 +1,7 @@
 <?php
 namespace BigBang;
-require_once('MySQLi_2.php');
-include 'Universe_object.php';
-include 'Star_object.php';
-require('./maths_service.php');
+require_once('../MySQLi_2.php');
+require('../loader.php');
 header("Content-type: image/png");
 $image= imagecreate(1000, 1000);
 
@@ -105,7 +103,7 @@ if(!empty($_GET)){
 		
 	
 	}
-	imagepng($image,"./views/view_zone.png");
+	imagepng($image,"./img/view_zone.png");
 }else{
 	imagestring($image, 4, 400, 0, "Waiting for coordinates", $blanc);
 }

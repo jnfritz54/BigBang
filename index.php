@@ -1,7 +1,7 @@
 <?php 
 namespace BigBang;
 require_once('MySQLi_2.php');
-require_once('Galaxy_object.php');
+require_once('loader.php');
 	
 $mysqli=new MySQLi_2("localhost","root", "root", "perso");
 
@@ -47,80 +47,87 @@ $git=sprintf('v %s <br/> du %s',  $commitHash, $commitDate->format('Y-m-d H:m:s'
 	body{background-color:#101010;color:white;height:100%;}
 	a{color:yellow}
 	a:hover{color:orange}
-	.colone{
-		width:30%;
+	
+	#content{
+		display:table;
+		table-layout: auto;
+		border-collapse: separate;
+		border-spacing:20px 10px;
+		width:100%;
+	}
+	.row{
+		display:table;
+		table-layout: auto;
+		border-collapse: separate;
+		border-spacing:20px 10px;
+		width:100%;
+	}
+	.box{		
+		display:table-cell;
 		background-color:#000000;
 		border-radius:10px;
 		border: 1px solid #101010;
 		box-shadow:0px 0px 7px 5px #999999 ;
-		margin-left: 1%;
-		margin-right: 1%;
-		margin-bottom: 2%;
-		padding-left:15px;}
-	#header{
-		background-color:#000000;
-		margin: 25px;
-		margin-left: 2%;
-		margin-right: 2%;
-		padding:10px;
-		border-radius:10px;
-		border: 1px solid #101010;
-		box-shadow:0px 0px 7px 5px #999999 ;
-		text-align:center
+		padding:15px;
 	}
-	.footer{
-		background-color:#000000;
-		margin: 25px;
-		margin-left: 2%;
-		margin-right: 2%;
-		padding:8px;
-		border-radius:10px;
-		border: 1px solid #101010;
-		box-shadow:0px 0px 5px 5px #555555 ;
-		text-align:center
+	.header{
+		width:100%;		
+		text-align:center;
 	}
+	.colone{		
+		/*display:table-cell;*/	
+		margin:15px;
+	}
+
 	
 </style>
 </head>
 <body>
-	<div>
-	<div id='header' style=''><h2>Index R&eacute;sum&eacute; du projet BigBang</h2></div>
-	<div id='header' style=''>
-		<img alt="Side" src="./views/view_side.png" width="300px" height="300px">
-		<img alt="Top" src="./views/view_top.png" width="300px" height="300px" >
-		<img alt="Lifeform" src="./views/view_lifeforms.png" width="300px" height="300px" >		
-		<img alt="Local" src="./views/view_zone.png" width="300px" height="300px">
+	<div id="content">
+	<div class='row'>
+		<div class='header box'>
+			<h2>Index R&eacute;sum&eacute; du projet BigBang</h2>
+		</div>
 	</div>
-	<div id='content' style='margin:1%'>
-		<div id='liens' class="colone" style='float:left;'>
+	<div class='row'>
+		<div class="header box" >
+			<img alt="Side" src="./views/img/view_side.png" width="300px" height="300px">
+			<img alt="Top" src="./views/img/view_top.png" width="300px" height="300px" >
+			<img alt="Lifeform" src="./views/img/view_lifeforms.png" width="300px" height="300px" >		
+			<img alt="Local" src="./views/img/view_zone.png" width="300px" height="300px">
+		</div>
+	</div>
+	<div class='row'>
+		<div id='liens' class="colone box">
 			<h3> Acces aux vues</h3>
 			<dl>
-				<dt><a href="./viewer.html">Vue galactique</a></dt>
-				<dt><a href="./viewer_lifeforms.html">Vue vie</a></dt>
-				<dt><a href="./viewer_zone.php">Vue partielle</a></dt>
-				<dt><a href="./viewer_system.php">Vue systeme</a></dt>
+				<dt><a href="./views/viewer.html">Vue galactique</a></dt>
+				<dt><a href="./views/viewer_lifeforms.html">Vue vie</a></dt>
+				<dt><a href="./views/viewer_zone.php">Vue partielle</a></dt>
+				<dt><a href="./views/viewer_system.php">Vue systeme</a></dt>
 			</dl>
 			
 			<h3> Versioning</h3>
 			<?php echo $git; ?>
 			<br/><br/>
 		</div>
-		<div id='infos' class="colone" style='float:left;'>
+		<div id='infos' class="box colone ">
 			<h3>Etat actuel de la base de donn&eacute;es:</h3>
 			<dl>
-				<dt><?php echo $cptSystemes;?> Systemes stellaires</dt>
-				<dt><?php echo $cptStars;?> Etoiles</dt>
-				<dt><?php echo $cptStars2;?> Etoiles en s&eacute;quence principale</dt>
-				<dt><?php echo $cptPlanetes;?> Planetes</dt>
-				<dt><?php echo $cptLifeForms;?> Formes de vie intelligentes</dt>
+				<dt><?php echo strings_service::numberFormat($cptSystemes,0);?> Systemes stellaires</dt>
+				<dt><?php echo strings_service::numberFormat($cptStars,0);?> Etoiles</dt>
+				<dt><?php echo strings_service::numberFormat($cptStars2,0);?> Etoiles en s&eacute;quence principale</dt>
+				<dt><?php echo strings_service::numberFormat($cptPlanetes,0);?> Planetes</dt>
+				<dt><?php echo strings_service::numberFormat($cptLifeForms,0);?> Formes de vie intelligentes</dt>
 			</dl>
 			Soit en moyenne:
 			<dl>
-				<dt><?php echo ($cptStars/$cptSystemes);?> Etoiles par systeme</dt>
-				<dt><?php echo ($cptPlanetes/$cptSystemes);?> Plan&egrave;tes par systeme</dt>
+				<dt><?php echo strings_service::numberFormat($cptStars/$cptSystemes);?> Etoiles par systeme</dt>
+				<dt><?php echo strings_service::numberFormat($cptPlanetes/$cptSystemes);?> Plan&egrave;tes par systeme</dt>
+				<dt>Une forme de vie pour <?php echo strings_service::numberFormat($cptSystemes/$cptLifeForms,2);?> systemes</dt>
 			</dl>
 		</div>
-		<div id='constantes' class="colone" style='float:left;'>
+		<div id='constantes' class=" box colone">
 			<h3>Constantes utilis&eacute;es:</h3>
 			Univers:
 			<dl>
@@ -132,14 +139,12 @@ $git=sprintf('v %s <br/> du %s',  $commitHash, $commitDate->format('Y-m-d H:m:s'
 			</dl>
 			Galaxie:
 			<dl>
-				<dt>Nombre de bras spiraux: <?php echo count( galaxy::$bras); ?></dt>
-				<dt>Rayon maximal du disque: <?php echo galaxy::$rayonMax ; ?> al</dt>
-				<dt>Epaisseur du disque: <?php echo galaxy::$altitudeMax; ?> al </dt>
+				<dt>Nombre de bras spiraux: <?php echo count( Galaxy::$bras); ?></dt>
+				<dt>Rayon maximal du disque: <?php echo Galaxy::$rayonMax ; ?> al</dt>
+				<dt>Epaisseur du disque: <?php echo Galaxy::$altitudeMax; ?> al </dt>
 			</dl>
 				
 		</div>
-		
-		<div style="clear:both"></div>
 	</div>
 	
 	</div>

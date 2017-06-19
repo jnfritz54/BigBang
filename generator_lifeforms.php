@@ -1,8 +1,5 @@
 <?php 
 	namespace BigBang;
-/*	include 'Planete_object.php';
-	include 'LifeForm_object.php';
-	include_once 'Galaxy_object.php';*/
 	require_once 'loader.php';
 	require_once 'MySQLi_2.php';
 	

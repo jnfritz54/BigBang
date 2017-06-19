@@ -1,9 +1,7 @@
 <?php
 namespace BigBang;
-require_once('MySQLi_2.php');
-include 'Universe_object.php';
-include 'Star_object.php';
-require('./maths_service.php');
+require_once('../MySQLi_2.php');
+require('../loader.php');
 
 //header("Content-type: image/png");
 $image= imagecreate(1200, 1200);

@@ -1,9 +1,7 @@
 <?php
 namespace BigBang;
-require_once('MySQLi_2.php');
-include 'Universe_object.php';
-include 'Star_object.php';
-require('./maths_service.php');
+require_once('../MySQLi_2.php');
+require('../loader.php');
 header("Content-type: image/png");
 $image= imagecreate(800, 800);
 
@@ -46,7 +44,7 @@ while($offset<1000000){
 	$offset+=$pas;
 }
 imagepng($image);
-imagepng($image,"./views/view_".$_GET['view'].".png");
+imagepng($image,"./img/view_".$_GET['view'].".png");
 
 function polaireToCartesien($rayon,$angle){
 	$x=$rayon*cos(deg2rad($angle));
