@@ -21,6 +21,10 @@ foreach($output as $ligne){
 	echo $ligne."\n";
 }
 
+$time=new DateTime();$output="";$val="";
+echo "Generate lifeforms".$time->format("H:i:s")."\n";
+exec("php ".$project_root."generator_lifeforms.php",$output,$val);
+
 $time=new DateTime();
 echo "End ".$time->format("H:i:s")."\n";
 

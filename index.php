@@ -98,6 +98,7 @@ $git=sprintf('v %s <br/> du %s',  $commitHash, $commitDate->format('Y-m-d H:m:s'
 		<div class="header box" >
 			<img alt="Side" src="./views/img/view_side.png" width="300px" height="300px">
 			<img alt="Top" src="./views/img/view_top.png" width="300px" height="300px" >
+			<!-- <img alt="Mixed" src="./views/img/view_mixed.png" width="300px" height="300px" > -->
 			<img alt="Lifeform" src="./views/img/view_lifeforms.png" width="300px" height="300px" >		
 			<img alt="Local" src="./views/img/view_zone.png" width="300px" height="300px">
 		</div>
@@ -106,10 +107,17 @@ $git=sprintf('v %s <br/> du %s',  $commitHash, $commitDate->format('Y-m-d H:m:s'
 		<div id='liens' class="colone box">
 			<h3> Acces aux vues</h3>
 			<dl>
-				<dt><a href="./views/viewer.html">Vue galactique</a></dt>
-				<dt><a href="./views/viewer_lifeforms.html">Vue vie</a></dt>
-				<dt><a href="./views/viewer_zone.php">Vue partielle</a></dt>
-				<dt><a href="./views/viewer_system.php">Vue systeme</a></dt>
+				<dt><a href="./views/viewer.html" target="_blank">Vue galactique</a></dt>
+				<dt><a href="./views/viewer_lifeforms.html" target="_blank">Vue vie</a></dt>
+				<dt><a href="./views/viewer_zone.php" target="_blank">Vue partielle</a></dt>
+				<dt><a href="./views/viewer_system.php" target="_blank">Vue systeme</a></dt>
+			</dl>
+			
+			<h3> Documentation</h3>
+			<dl>
+				<dt><a href="./README.md" target="_blank">Readme</a></dt>
+				<dt><a href="./LICENSE" target="_blank">License</a></dt>
+				<dt><a href="./docs/echelle_civilisations.ods" target="_blank">Classification des civilisations </a></dt>				
 			</dl>
 			
 			<h3> Versioning</h3>

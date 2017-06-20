@@ -95,8 +95,16 @@ class LifeForm {
 	 */
 	public $sensPrincipal;
 	
+	/**
+	 * appendice manipulateur
+	 * @var string
+	 */
 	public $appendice;
 	
+	/**
+	 * 
+	 * @var integer
+	 */
 	public $nombreMembres;
 	
 	/**
@@ -106,13 +114,13 @@ class LifeForm {
 	public $epiderme;
 	
 	/***
-	 * 
+	 * régime alimentaire
 	 * @var string $regime
 	 */
 	public $regime;
 	
 	/***
-	 * 
+	 * forme de gouvernement
 	 * @var integer
 	 */
 	public $governement;
@@ -151,6 +159,9 @@ class LifeForm {
 		$regime=$this->regimeList[rand(0,(count($this->regimeList)-1))];
 		$this->regime=$regime;
 		
+		$this->milieu=$this->milieuList[rand(0,(count($this->milieuList)-1))];
+		
+		//cohérence
 		while($regime!="photosynthese" && $regime!="vegetarien" && $sens=="toucher"){
 			$sens=$sens=$this->sensList[rand(0,(count($this->sensList)-1))];
 			$this->sensPrincipal=$sens;
@@ -166,9 +177,7 @@ class LifeForm {
 			}else{
 				continue;
 			}
-		}
-		
-		$this->milieu=$this->milieuList[rand(0,(count($this->milieuList)-1))];
+		}		
 		
 		$proba=rand(0,100);
 		foreach ($this->avancementProba as $range => $id){

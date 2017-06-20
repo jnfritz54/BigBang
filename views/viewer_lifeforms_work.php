@@ -26,7 +26,7 @@ $offset=0;
 	//$query="select * from Stars where systeme>".$offset." order by Id limit 100000;";
 	//$res=$mysqli->query($query);
 	
-	$query="select * from Systemes where id in (Select originSystem from Lifeforms where 1) order by Id;";
+	$query="select * from Systemes where id in (Select originSystem from Lifeforms where avancement >=5) order by Id;";
 	$res=$mysqli->query($query);
 	$cpt=0;
 	while($row=$res->fetch_assoc()){
