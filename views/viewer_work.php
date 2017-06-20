@@ -24,7 +24,8 @@ while($offset<1000000){
 	//$query="select * from Stars where systeme>".$offset." order by Id limit 100000;";
 	//$res=$mysqli->query($query);
 	
-	$query="select * from Systemes where id>".$offset." and id <=".($offset+$pas)." order by Id limit ".$pas.";";
+	//$query="select * from Systemes where id>".$offset." and id <=".($offset+$pas)." order by Id limit ".$pas.";";
+	$query="SELECT sy.* FROM Stars s, Systemes sy WHERE sy.id = s.systeme AND s.typeSurcharge = s.typeOrigine and sy.id >".$offset." and sy.id <=".($offset+$pas)." order by sy.Id limit ".$pas.";"; 
 	$res=$mysqli->query($query);
 	$cpt=0;
 	while($row=$res->fetch_assoc()){

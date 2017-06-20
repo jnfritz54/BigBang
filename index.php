@@ -31,6 +31,11 @@ $resLf=$mysqli->query($sqlLifeforms);
 $tmp=$resLf->fetch_assoc();
 $cptLifeForms=$tmp['cpt'];
 
+$sqlLifeforms2="select count(*) as cpt from Lifeforms where avancement>=5;";
+$resLf2=$mysqli->query($sqlLifeforms2);
+$tmp=$resLf2->fetch_assoc();
+$cptLifeForms2=$tmp['cpt'];
+
 //infos versionning 
 $commitHash = trim(exec('git log --pretty="%h" -n1 HEAD'));
 
@@ -108,7 +113,8 @@ $git=sprintf('v %s <br/> du %s',  $commitHash, $commitDate->format('Y-m-d H:m:s'
 			</dl>
 			
 			<h3> Versioning</h3>
-			<?php echo $git; ?>
+			<?php echo $git; ?><br/>
+			<a href="https://github.com/MilamberRedux/BigBang" target="_blank">Voir sur Github</a>
 			<br/><br/>
 		</div>
 		<div id='infos' class="box colone ">
@@ -118,7 +124,8 @@ $git=sprintf('v %s <br/> du %s',  $commitHash, $commitDate->format('Y-m-d H:m:s'
 				<dt><?php echo strings_service::numberFormat($cptStars,0);?> Etoiles</dt>
 				<dt><?php echo strings_service::numberFormat($cptStars2,0);?> Etoiles en s&eacute;quence principale</dt>
 				<dt><?php echo strings_service::numberFormat($cptPlanetes,0);?> Planetes</dt>
-				<dt><?php echo strings_service::numberFormat($cptLifeForms,0);?> Formes de vie intelligentes</dt>
+				<dt><?php echo strings_service::numberFormat($cptLifeForms,0);?> Formes de vie</dt>
+				<dt><?php echo strings_service::numberFormat($cptLifeForms2,0);?> Formes de vie de stade 5 et plus</dt>
 			</dl>
 			Soit en moyenne:
 			<dl>

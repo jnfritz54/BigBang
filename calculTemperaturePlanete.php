@@ -65,7 +65,7 @@ while($debut<$fin){
 				//planète tempérée suffisement agée pour voir des formes de vie se dévelloper 
 				//echo "Système: ".$row['systeme']." Planète eden: ".$row['id']." => ".$tempC."°C ( Age: ".$Stars[$row['objectOrbited']]['age'].") \n";
 				$cptHab++;
-				if($Stars[$row['objectOrbited']]['age']>=2 && $row['masse']<12 
+				if($Stars[$row['objectOrbited']]['age']>=2 && $row['masse']<5 
 						&& ($row['particularite']=="m" || $row['particularite']=="Mm")){
 					//planète tempérée suffisement agée et stable pour voir des formes de vie et un écosysteme complexe 
 					$cptEden++; 

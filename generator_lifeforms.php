@@ -18,7 +18,6 @@
 		$sqlValues[]=$life->__toSqlValues();
 		$cptInsert++;
 
-		
 	}
 
 	$requete=$sqlInsert.join(", ",$sqlValues).";";
