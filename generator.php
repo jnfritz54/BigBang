@@ -16,7 +16,7 @@
 	
 	$i=1;
 	$cptStars=0;
-	while($i<=1000000){
+	while($i<=2000000){
 		$systeme=new Systeme();
 		$sysValues[]=$systeme->__toSqlValues();
 		$nbStars=1;

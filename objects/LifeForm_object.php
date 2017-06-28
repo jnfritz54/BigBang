@@ -2,9 +2,9 @@
 namespace BigBang;
 require_once 'loader.php';
 
-class LifeForm {
+class LifeForm extends Object{
 	
-	private $appendicePrehensile=array("aucun", "main/patte","pince","tentacule","queue","bouche multi-usage");
+	private $appendicePrehensile=array("aucun","main/patte","pince","tentacule","queue","bouche multi-usage");
 	
 //	private $regne=array("mineral", "vegetal","animal");
 	
@@ -14,9 +14,11 @@ class LifeForm {
 	
 	private $membres=array(0,2,4,6,8,10);
 	
-	private $epidermeList=array("peau","cuir","chitine", "fourrure","ecailles","plaques osseuses");
+	private $epidermeList=array("p"=>"peau","cu"=>"cuir","ch"=>"chitine","f"=> "fourrure","e"=>"ecailles","pl"=>"plaques osseuses");
+	private $epidermeCodeList=array("p","cu","ch","f","e","pl");
 	
-	private $regimeList=array('photosynthese','vegetarien','carnivore','omnivore','charognard');
+	private $regimeList=array("p"=>'photosynthese',"v"=> 'vegetarien',"ca"=>'carnivore',"o"=>'omnivore',"ch"=>'charognard',"cs"=>"chimio-synthèse");
+	private $regimeCodeList=array("p","v","ca","o","ch","cs");
 	
 	private $dureeVieProprotion=array(
 			5=>array('min'=>20,'max'=>30), //pre-civilisation
@@ -54,12 +56,17 @@ class LifeForm {
 			//ce qui lui assure un développement quasi-galactique
 			8=>"hypothétique" //indépendance totale de l'environnement, forme de vie énergétique et/ou capable de modifier de grand pans de l'univers
 	);
+	
+	//on part du principe que les probabilités de répartition des espèces sont inversement proportionelles à leur avancement
+	// on doit arriver à produire un nombre réduit (>1000) d'espèces dévellopées de stade 5 & 6
+	// on ne génère pas d'espèce de stade 7 car la probabilité est inférieure à une par galaxie réelle
+	// pas non plus de stade 8 car la probabilité est inférieure à 1 pour l'univers observable
 	private $avancementProba=array(
 		30=>0,
 		50=>1,
 		65=>2,
-		75=>3,
-		85=>4,
+		80=>3,
+		90=>4,
 		95=>5,
 		100=>6,
 	);
@@ -143,31 +150,45 @@ class LifeForm {
 	 */
 	public $avancement;
 	
+	
 	public function __construct($planeteOrigine,$systemeOrigine){
+
 		$this->originPlanet=$planeteOrigine;
 		$this->originSystem=$systemeOrigine;
 		
 		$sens=$this->sensList[rand(0,(count($this->sensList)-1))];
 		$this->sensPrincipal=$sens;
 		
-		$epiderme=$this->epidermeList[rand(0,(count($this->epidermeList)-1))];
+		$epiderme=$this->epidermeCodeList[rand(0,(count($this->epidermeCodeList)-1))];
 		$this->epiderme=$epiderme;
 		
 		$gov=$this->govType[rand(0,(count($this->govType)-1))];
 		$this->governement=$gov;
 		
-		$regime=$this->regimeList[rand(0,(count($this->regimeList)-1))];
+		$regime=$this->regimeCodeList[rand(0,(count($this->regimeCodeList)-1))];
 		$this->regime=$regime;
 		
 		$this->milieu=$this->milieuList[rand(0,(count($this->milieuList)-1))];
+		$this->appendice=$this->appendicePrehensile[rand(0,(count($this->appendicePrehensile)-1))];
 		
-		//cohérence
-		while($regime!="photosynthese" && $regime!="vegetarien" && $sens=="toucher"){
+
+		//cohérence: si pas de membres: pas d'appendice préhenseur
+		if($this->membres==0){
+			$this->appendice=$this->appendicePrehensile[0];
+		}
+		//cohérence: le sens principal toucher restreint les régimes possibles
+		while($regime!="p" && $regime!="v" && $sens=="toucher"){
 			$sens=$sens=$this->sensList[rand(0,(count($this->sensList)-1))];
 			$this->sensPrincipal=$sens;
 		}
-		
-		$this->appendice=$this->appendicePrehensile[rand(0,(count($this->appendicePrehensile)-1))];
+		//cohérence: des pinces nécessitent un épiderme rigide
+		while($this->appendice=="pinces" && $this->epiderme!="chitine" && $this->epiderme=="plaques osseuses"){
+			$this->appendice=$this->appendicePrehensile[rand(0,(count($this->appendicePrehensile)-1))];
+		}
+		//cohérence: des pinces ne sont pas adaptées a un déplacement arboricole
+		while($this->appendice=="pinces" && $this->milieu=="arboricole"){
+			$this->appendice=$this->appendicePrehensile[rand(0,(count($this->appendicePrehensile)-1))];
+		}
 		$this->nombreMembres=$this->membres[rand(0,(count($this->membres)-1))];
 				
 		$proba=rand(0,100);
@@ -190,21 +211,27 @@ class LifeForm {
 		}
 		
 	}
-	
-	
-	
+		
 
 	public function __toString(){
-		return "\n";
-	
-	
+		$string="Espece :'".$this->name."'\n Basée sur le ".$this->sensPrincipal;
+		
+		if($this->appendice!="aucun"){$string.=" manipulant son environnement grâce à son/ses ".$this->appendice;}
+		$string.=" posédant ".$this->nombreMembres." membres et dont le corps est recouvert de ".$this->epidermeList[$this->epiderme].
+		".\n Son régime alimentaire ".$this->regimeList[$this->regime]." lui permet de vivre en moyenne ".$this->dureeVie
+		." ans dans son milieu naturel ".$this->milieu.".\n Cette espèce est actuellement au stade ".$this->avancement." organisée en "
+		.$this->governement." ";
+
+		return $string;	
 	}
 	
+
 	public function __toSqlValues(){
 		return "('','".$this->name."','".$this->originPlanet."','".$this->originSystem."','".$this->sensPrincipal."',
 				'".$this->appendice."','".$this->nombreMembres."','".$this->epiderme.
 		"','".$this->regime."','".$this->governement."','".$this->dureeVie."','".$this->milieu."','".$this->avancement."') ";
 	}
+
 	
 }
 ?>

@@ -44,6 +44,15 @@ $commitDate->setTimezone(new \DateTimeZone('UTC'));
 
 $git=sprintf('v %s <br/> du %s',  $commitHash, $commitDate->format('Y-m-d H:m:s'));
 
+$sql="select * from Lifeforms where 1 limit 1";
+$res=$mysqli->query($sql);
+$row=$res->fetch_assoc();
+/***
+$lf=new LifeForm();
+$lf->__loadFromSqlRow($row);
+
+echo $lf->__toHtml();
+*/
 ?>
 <html>
 <head>
