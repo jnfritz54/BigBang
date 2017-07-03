@@ -16,29 +16,20 @@ ROADMAP
 
 Step 1:create populated places in a universe 
 
-a) generate random stars (statisticaly equivalent as in our galaxy) --done--
-
-b) add a galactic structure similar to reality --done--
-
-b) generate random planets --done--
-
-c) generate complete stellar system (1,n stars + 0,n planets) --done--
-
-d) generate random sentient races --done--
-
+1) generate random stars (statisticaly equivalent as in our galaxy) --done--
+2) add a galactic structure similar to reality --done--
+3) generate random planets --done--
+4) generate complete stellar system (1,n stars + 0,n planets) --done--
+5) generate random sentient races --done--
 
 Step 2: integration of habitable zones for stars 
 
-a) planetary temperature estimation --done--
-
-b) mark habitable planets --done--
-
-c) use it to alter population generation --done--
+1) planetary temperature estimation --done--
+2) mark habitable planets --done--
+3) use it to alter population generation --done--
 
 Addendum:
-
-a) generate galactic viewer --done--
-
-b) generate group viewer --done--
-
-c) generate system viewer --done--
+1) generate galactic viewer --done--
+2) generate group viewer --done--
+3) generate system viewer --done--
+4) generate lifeforms distribution viewer --done--
