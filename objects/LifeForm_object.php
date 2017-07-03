@@ -14,11 +14,11 @@ class LifeForm extends Object{
 	
 	private $membres=array(0,2,4,6,8,10);
 	
-	private $epidermeList=array("p"=>"peau","cu"=>"cuir","ch"=>"chitine","f"=> "fourrure","e"=>"ecailles","pl"=>"plaques osseuses");
-	private $epidermeCodeList=array("p","cu","ch","f","e","pl");
+	private $epidermeList=array(0=>"peau",1=>"cuir",2=>"chitine",3=> "fourrure",4=>"ecailles",5=>"plaques osseuses");
+	private $epidermeCodeList=array(0,1,2,3,4,5);
 	
-	private $regimeList=array("p"=>'photosynthese',"v"=> 'vegetarien',"ca"=>'carnivore',"o"=>'omnivore',"ch"=>'charognard',"cs"=>"chimio-synthèse");
-	private $regimeCodeList=array("p","v","ca","o","ch","cs");
+	private $regimeList=array(0=>'photosynthese',1=> 'vegetarien',2=>'carnivore',3=>'omnivore',4=>'charognard',5=>"chimio-synthèse");
+	private $regimeCodeList=array(0,1,2,3,4,5);
 	
 	private $dureeVieProprotion=array(
 			5=>array('min'=>20,'max'=>30), //pre-civilisation
