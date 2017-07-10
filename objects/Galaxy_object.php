@@ -21,10 +21,10 @@ abstract class Galaxy{
 	
 	//paramétrage des bras: angle de départ & ouverture en degrés (360= spirale atteind le bord en 1 tour)
 	static $bras=array(
-			array('angle'=>0,'ouverture'=>300),
-			array('angle'=>65,'ouverture'=>300),
-			array('angle'=>180,'ouverture'=>300),
-			array('angle'=>245,'ouverture'=>300)
+			//array('angle'=>0,'ouverture'=>300),
+			array('angle'=>65,'ouverture'=>200),
+			//array('angle'=>180,'ouverture'=>300),
+			array('angle'=>245,'ouverture'=>200)
 	);
 	
 	//année galactique en années terrestres 

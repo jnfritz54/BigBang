@@ -156,6 +156,8 @@ class LifeForm extends Object{
 		$this->originPlanet=$planeteOrigine;
 		$this->originSystem=$systemeOrigine;
 		
+		$this->name=strings_service::generatePrononcableString(6,rand(6,12));
+
 		$sens=$this->sensList[rand(0,(count($this->sensList)-1))];
 		$this->sensPrincipal=$sens;
 		

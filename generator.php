@@ -11,12 +11,13 @@
 	$planeteValues=array();
 	
 	$probaNbEtoiles=array(50=>1,75=>2,95=>3,100=>4);
+
 	
 	$mysqli=new MySQLi_2("localhost","root", "root", "perso");
 	
 	$i=1;
 	$cptStars=0;
-	while($i<=2000000){
+	while($i<=1000000){
 		$systeme=new Systeme();
 		$sysValues[]=$systeme->__toSqlValues();
 		$nbStars=1;
