@@ -5,7 +5,7 @@ require_once 'loader.php';
 
 class Bigbang extends Object {
 	
-	$rootDir="";
+	public $rootDir="";
 	
 	public function __construct($rootDir="/var/www/",$verboseMode=1) {
 		$this->verbose=$verboseMode;
