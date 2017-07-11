@@ -1,3 +1,50 @@
+-- phpMyAdmin SQL Dump
+-- version 4.0.10deb1
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Jul 11, 2017 at 11:18 AM
+-- Server version: 5.5.55-0ubuntu0.14.04.1
+-- PHP Version: 5.5.9-1ubuntu4.21
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `perso`
+--
+CREATE DATABASE IF NOT EXISTS `perso` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `perso`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Lifeforms`
+--
+
+CREATE TABLE IF NOT EXISTS `Lifeforms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) DEFAULT NULL,
+  `originPlanet` int(11) NOT NULL,
+  `originSystem` int(11) NOT NULL,
+  `sensPrincipal` varchar(50) NOT NULL,
+  `appendice` varchar(50) DEFAULT NULL,
+  `nombreMembres` int(11) NOT NULL,
+  `epiderme` tinyint(4) NOT NULL,
+  `regime` tinyint(2) NOT NULL,
+  `governement` varchar(100) DEFAULT NULL,
+  `dureeVie` int(11) DEFAULT NULL,
+  `milieu` varchar(50) NOT NULL,
+  `avancement` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `originSystem` (`originSystem`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1035 ;
 
 -- --------------------------------------------------------
 
@@ -18,8 +65,9 @@ CREATE TABLE IF NOT EXISTS `Planetes` (
   `dureeJour` float DEFAULT NULL,
   `albedo` float NOT NULL,
   `rayonnement` float DEFAULT NULL,
+  `eden` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7844691 ;
 
 -- --------------------------------------------------------
 
@@ -39,8 +87,9 @@ CREATE TABLE IF NOT EXISTS `Stars` (
   `rayonnement` float DEFAULT NULL,
   `rayon` float NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `systeme` (`systeme`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `systeme` (`systeme`),
+  KEY `systeme_2` (`systeme`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1801293 ;
 
 -- --------------------------------------------------------
 
@@ -55,4 +104,8 @@ CREATE TABLE IF NOT EXISTS `Systemes` (
   `distance` float NOT NULL,
   `altitude` float NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1000001 ;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
