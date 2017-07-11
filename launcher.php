@@ -1,31 +1,32 @@
 <?php
+namespace BigBang;
+require_once 'loader.php';
+
 $project_root="/var/www/html/perso/bigbang/";
-$time=new DateTime();$output="";$val="";
+$time=new \DateTime();
 echo "Start \n";
+$bigbang=new Bigbang($project_root,2);
 
 echo "Cleaning previous data ".$time->format("H:i:s")."\n";
-exec("php ".$project_root."cleaner.php",$output,$val);
+$bigbang->cleanDatabase();
 
-$time=new DateTime();$output="";$val="";
+$time=new \DateTime();
 echo "Generating raw data ".$time->format("H:i:s")."\n";
-exec("php ".$project_root."generator.php",$output,$val);
+$bigbang->generateRaw();
 
-$time=new DateTime();$output="";$val="";
+$time=new \DateTime();
 echo "Correcting multi-stars systems ".$time->format("H:i:s")."\n";
-exec("php ".$project_root."grandChambardement.php",$output,$val);
+$bigbang->grandChambardement();
 
-$time=new DateTime();$output="";$val="";
+$time=new \DateTime();
 echo "Searching for habitable planets ".$time->format("H:i:s")."\n";
-exec("php ".$project_root."calculTemperaturePlanete.php",$output,$val);
-foreach($output as $ligne){
-	echo $ligne."\n";
-}
+$bigbang->calculTemperaturePlanete();
 
-$time=new DateTime();$output="";$val="";
+$time=new \DateTime();
 echo "Generate lifeforms".$time->format("H:i:s")."\n";
-exec("php ".$project_root."generator_lifeforms.php",$output,$val);
+$bigbang->generateLifeforms();
 
-$time=new DateTime();
+$time=new \DateTime();
 echo "End ".$time->format("H:i:s")."\n";
 
 /*

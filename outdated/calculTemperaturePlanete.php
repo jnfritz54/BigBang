@@ -10,6 +10,9 @@ require_once('MySQLi_2.php');
 
 $mysqli=new MySQLi_2("localhost","root", "root", "perso");
 
+$bigbang=new Bigbang();
+$bigbang->calculTemperaturePlanete();
+die;
 
 //on va devoir fonctionner par tranches de 100-200 000 systemes
 //si on essaye de prendre le million on mange un kill-9 systeme

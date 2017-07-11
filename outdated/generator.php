@@ -3,6 +3,10 @@
 	require_once 'loader.php';
 	require_once('MySQLi_2.php');
 	
+	$bigbang=new Bigbang();
+	$bigbang->generateRaw();
+	die;
+	
 	$starInsert="insert into Stars values ";
 	$starValues=array();
 	$sysInsert="insert into Systemes values ";
