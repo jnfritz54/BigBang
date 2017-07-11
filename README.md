@@ -15,6 +15,7 @@ USAGE:
 1) Create database using bigbang.sql (update db logins in generator.php if necessary) 
 2) *OPTIONAL* customize galaxy by editing the galaxy object definition file (spiral arms, width etc...)
 3) php launcher : populate stars and planets, determine habitable planets
+4) use a browser to open the index.php file , load the viewers from the left menu and see what has been generated
 
 ROADMAP
 
