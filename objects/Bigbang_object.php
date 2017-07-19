@@ -5,24 +5,51 @@ require_once 'loader.php';
 
 class Bigbang extends Object {
 	
-	public $rootDir="";
+	private $rootDir="";
+	private $dbhost="";
+	private $dbuser="";
+	private $dbpass="";
+	private $dbName="";
 	
-	public function __construct($rootDir="/var/www/",$verboseMode=1) {
+	public function __construct($rootDir="/var/www/",$dbhost="localhost",$dbuser="root",$dbpass='root',$dbName="perso",$verboseMode=1) {
 		$this->verbose=$verboseMode;
+		$this->dbhost=$dbhost;
+		$this->dbuser=$dbuser;
+		$this->dbName=$dbName;
+		$this->dbpass=$dbpass;
 		$this->rootDir=$rootDir;
 	}
 
 	
 	private function getConnexion(){
-		$mysqli=new MySQLi_2("localhost","root", "root", "perso");
-		return $mysqli;
+		try{
+			$mysqli=new MySQLi_2($this->dbhost,$this->dbuser, $this->dbpass,$this->dbName);
+			return $mysqli;
+		}Catch(Exception $e){
+			$this->echoVerbose(0, "Unable to connect to database");
+			die;
+		}
 	}
 	
 	/**
 	 * @todo vérifier l'existance et la base et des tables ou drop et réimport depuis le .sql
 	 */
-	private function createDatabaseIfNotExist(){
+	public function createOrCleanDatabase(){
+		$databaseName="perso";
+		$mysqli=new MySQLi_2("localhost","root", "root");
+		$res=$mysqli->query("SHOW DATABASES LIKE '".$databaseName."';");
+		$result=$res->fetch_assoc();
 		
+		if(!empty($result)){ 
+			$this->echoVerbose(1, "Cleaning database from previous executions\n");
+			$this->cleanDatabase();
+		}else{		
+			$this->echoVerbose(1, "Creating database\n");
+			$mysqli->query("CREATE DATABASE IF NOT EXISTS ".$databaseName.";");
+			$mysqli->select_db($databaseName);
+			$mysqli->multi_query(file_get_contents($this->rootDir."bigbang.sql"));			
+		}
+		return true;
 	}
 	
 	/***

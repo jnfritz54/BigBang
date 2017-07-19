@@ -4,11 +4,10 @@ require_once 'loader.php';
 
 $project_root="/var/www/html/perso/bigbang/";
 $time=new \DateTime();
-echo "Start \n";
-$bigbang=new Bigbang($project_root,2);
 
-echo "Cleaning previous data ".$time->format("H:i:s")."\n";
-$bigbang->cleanDatabase();
+echo "Start \n";
+$bigbang=new Bigbang($project_root);
+$bigbang->createOrCleanDatabase();
 
 $time=new \DateTime();
 echo "Generating raw data ".$time->format("H:i:s")."\n";
