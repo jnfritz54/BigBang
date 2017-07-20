@@ -15,13 +15,22 @@ class Planete{
 		100=>'P'
 	);
 	
-	private $sousCategorie=array(
-			"T"=>array("Tf"=>"en fusion","Ts"=>"sterile et/ou sans atmosphere","Ta"=>"aride","Tt"=>"earth-like","Te"=>"à dominante aquatique"),
-			"G"=>array("Gh"=>"Hydrogène", "Ghe"=>"Helium","Gm"=>"Methane"),
-			"C"=>array("C"=>"Standard"),
-			"A"=>array("Ad"=>"Dense","Al"=>"dispersee"),
-			"B"=>array("B"=>"Standard","Bs"=>"Sous-naine brune"),
-			"P"=>array("C"=>"Standard"),
+	private $sousCategorieList=array(
+			"T"=>array("sterile et/ou sans atmosphere","désertique","aride","earth-like","à dominante aquatique","planète ocean"),
+			"G"=>array("Hydrogène","Helium","Methane"),
+			"C"=>array("Standard"),
+			"A"=>array("Dense","dispersee","principalement glacière"),
+			"B"=>array("Standard","Sous-naine brune"),
+			"P"=>array("Standard"),
+	);
+	
+	private $sousCategorieTbyHydro=array(
+		3=>0,
+		10=>1,
+		17=>2,
+		29=>3,
+		35=>4,
+		65=>5,
 	);
 	
 	//masses exprimées en masses terrestres
@@ -77,6 +86,10 @@ class Planete{
 	
 	public $rayonnement; // rayonnement reçu à la surface en w/m²
 	
+	public $atmosphere; //pression atmosphérique en Bar
+	
+	public $hydrometrie=null; //quantité d'eau sur la planète en milième de pourcentage de sa masse (terre = 0.023% =23)
+	
 	public $eden=0;
 
 	public function __construct($systeme,$idObjetOrbited,$masseObjetOrbited,$rayonnement,$rangPlanete,$contractionSysteme=0.5){
@@ -84,6 +97,24 @@ class Planete{
 		$type=maths_service::float_rand(0, count($this->naturePlanete)-1);
 		$arr=array_keys($this->naturePlanete);
 		$this->type=$arr[$type];
+		
+		
+		if(count($this->sousCategorieList[$this->type])==1){
+			$this->sousType=0;
+		}elseif($this->type=='T'){
+			
+			$this->hydrometrie=rand(0,70);
+			
+			foreach ($this->sousCategorieTbyHydro as $range => $subTypeIndex){
+				if($this->hydrometrie<=$range){
+					$this->sousType=$subTypeIndex;break;
+				}else{
+					continue;
+				}
+			}
+		}else{
+			$this->sousType= rand(0,count($this->sousCategorieList[$this->type])-1);
+		}
 		
 		//$this->distanceEtoile=maths_service::probaDescendanteLineaire(0.05, 1500,4);
 		//$this->distanceEtoile=maths_service::planetesLoiTitusBode($rangPlanete);
@@ -118,9 +149,9 @@ class Planete{
 	}
 	
 	public function __toSqlValues(){
-		return "('',".$this->systeme.",".$this->objectOrbited.",'".$this->type."','".$this->masse."','"
+		return "('',".$this->systeme.",".$this->objectOrbited.",'".$this->type."','".$this->sousType."','".$this->masse."','"
 				.$this->particularite."','".$this->distanceEtoile."','".$this->inclinaisonOrbite."','".$this->dureeAnnee."','".
-		$this->dureeJour."','".$this->albedo."','".$this->rayonnement."','".$this->eden."') ";
+		$this->dureeJour."','".$this->albedo."','".$this->rayonnement."','".$this->hydrometrie."','".$this->eden."') ";
 	}
 	
 	public function simplifiedCircularOrbit($masseObjetOrbited){
