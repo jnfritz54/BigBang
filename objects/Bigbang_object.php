@@ -1,7 +1,7 @@
 <?php 
 namespace BigBang;
 require_once 'MySQLi_2.php';
-require_once 'loader.php';
+
 
 class Bigbang extends Object {
 	

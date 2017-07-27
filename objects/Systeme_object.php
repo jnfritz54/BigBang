@@ -1,8 +1,7 @@
 <?php 
 namespace BigBang;
-require_once 'loader.php';
 
-class Systeme{
+class Systeme extends Object{
 	
 	public $id;
 	public $name;
@@ -22,7 +21,7 @@ class Systeme{
 	
 	
 	public function __toString(){
-		return "'".$this->name."' '".$this->angle."' '".$this->distance."' '".$this->altitude."'\n";
+		return "Système ".$this->name.", coordonées ".$this->angle." ".$this->distance." ".$this->altitude."";
 	}
 	public function __toSqlValues(){
 		return "('','".$this->name."','".$this->angle."','".$this->distance."','".$this->altitude."')";
@@ -54,7 +53,7 @@ class Systeme{
 				$distanceMin=$distanceMoyenne-(Galaxy::$epaisseurBras/2);
 				$distanceFinale=$distanceMoyenne+maths_service::float_rand(0,Galaxy::$epaisseurBras,2);
 				
-				$this->name="bras";
+				//$this->name="bras";
 				
 				//$this->distance=$distanceFinale;
 				$this->distance=$distanceFinale;

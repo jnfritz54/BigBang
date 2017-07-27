@@ -1,7 +1,7 @@
 <?php 
 namespace BigBang;
 
-class Star{
+class Star extends Object{
 
 	private $etoileTypes=array('L'=>"naine brune",'M'=>"naine rouge",
 			'K'=>"naine orange",'G'=>'naine jaune','F'=>"jaune/blanche",'A'=>"blanche",'B'=>"blanche/bleue",'O'=>"bleue");

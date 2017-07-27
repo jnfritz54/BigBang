@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 11, 2017 at 11:18 AM
+-- Generation Time: Jul 20, 2017 at 10:43 AM
 -- Server version: 5.5.55-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.21
 
@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `perso`
 --
-CREATE DATABASE IF NOT EXISTS `perso` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `perso`;
 
 -- --------------------------------------------------------
 
@@ -44,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `Lifeforms` (
   `avancement` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `originSystem` (`originSystem`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1035 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=980 ;
 
 -- --------------------------------------------------------
 
@@ -57,6 +55,7 @@ CREATE TABLE IF NOT EXISTS `Planetes` (
   `systeme` int(11) NOT NULL,
   `objectOrbited` int(11) DEFAULT NULL,
   `type` varchar(3) NOT NULL,
+  `sousType` int(11) NOT NULL,
   `masse` float NOT NULL,
   `particularite` varchar(50) DEFAULT NULL,
   `distanceEtoile` float NOT NULL,
@@ -65,9 +64,10 @@ CREATE TABLE IF NOT EXISTS `Planetes` (
   `dureeJour` float DEFAULT NULL,
   `albedo` float NOT NULL,
   `rayonnement` float DEFAULT NULL,
+  `hydrometrie` int(11) DEFAULT NULL,
   `eden` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7844691 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7835594 ;
 
 -- --------------------------------------------------------
 
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `Stars` (
   PRIMARY KEY (`id`),
   KEY `systeme` (`systeme`),
   KEY `systeme_2` (`systeme`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1801293 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1801358 ;
 
 -- --------------------------------------------------------
 

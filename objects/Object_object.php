@@ -1,6 +1,5 @@
 <?php 
 namespace BigBang;
-require_once 'loader.php';
 
 abstract class Object {
 	

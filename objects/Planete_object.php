@@ -1,10 +1,12 @@
 <?php
 namespace BigBang;
 
-class Planete{
+class Planete extends Object{
 	
 	private $naturePlanete=array('T'=>'tellurique','G'=> 'gazeuse',
 			'C'=>'chtonienne','A'=>'ceinture asteroides',"B"=>'naine brune','P'=>"Planetoide rocheux");
+	public $codeCouleurType=array('T'=>'green','G'=> 'orange',
+			'C'=>'purple','A'=>'lightgrey',"B"=>'brown','P'=>"grey");
 	
 	private $probaNature=array(
 		35=>'T',
@@ -54,7 +56,7 @@ class Planete{
 	
 	private $particularitePlanete=array('0'=>"nothing",'M'=>'moon','Mm'=>'multiples moons','R'=>'rings','F'=>'debris field');
 	private $particulariteProba=array(50=>"0",70=>'M',80=>'Mm',90=>'R',100=>'F');
-		
+			
 	public $systeme;
 	
 	/**
@@ -142,11 +144,28 @@ class Planete{
 	}
 	
 	public function __toString(){
-		return "systeme ".$this->systeme." type: ".$this->type." masse: ".$this->masse."(MT) orbiting ".$this->objectOrbited.
-		" at ".$this->distanceEtoile."(al)\n";
+		$string="";
+		if(in_array($this->type,array("T","C","G"))){
+			$string.="planète ";
+		}
+		$string.=$this->naturePlanete[$this->type]." (".$this->sousCategorieList[$this->type][$this->sousType].") masse: ".$this->masse."(MT) ";
+		if($this->objectOrbited==null){
+			$string.=" orbitant à ".$this->distanceEtoile."(as) du barycentre ";
+		}else{
+			$string.=" orbitant à ".$this->distanceEtoile."(as)";
+		}
+		if($this->rayonnement!=0 and $this->rayonnement<9999){
+			$string.=" température ".$this->rayonnement."°C en surface ";
+		}
+		//$string.=" at ".$this->distanceEtoile."(al)\n";
 				
+		return $string;
 				
 	}
+	public function getColor(){
+		return $this->codeCouleurType[$this->type];
+	}
+
 	
 	public function __toSqlValues(){
 		return "('',".$this->systeme.",".$this->objectOrbited.",'".$this->type."','".$this->sousType."','".$this->masse."','"
