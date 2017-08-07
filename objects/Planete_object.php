@@ -3,11 +3,23 @@ namespace BigBang;
 
 class Planete extends Object{
 	
-	private $naturePlanete=array('T'=>'tellurique','G'=> 'gazeuse',
+	/**
+	 * code et texte des types de planètes
+	 * @var array
+	 */
+	public $naturePlanete=array('T'=>'tellurique','G'=> 'gazeuse',
 			'C'=>'chtonienne','A'=>'ceinture asteroides',"B"=>'naine brune','P'=>"Planetoide rocheux");
+	/**
+	 * code couleur des types de planètes
+	 * @var array
+	 */
 	public $codeCouleurType=array('T'=>'green','G'=> 'orange',
 			'C'=>'purple','A'=>'lightgrey',"B"=>'brown','P'=>"grey");
 	
+	/**
+	 * répartition statistique des types de planètes générées
+	 * @var array
+	 */
 	private $probaNature=array(
 		35=>'T',
 		70=>'G',
@@ -17,6 +29,10 @@ class Planete extends Object{
 		100=>'P'
 	);
 	
+	/**
+	 * Sous-types de planètes disponibles par type
+	 * @var array
+	 */
 	private $sousCategorieList=array(
 			"T"=>array("sterile et/ou sans atmosphere","désertique","aride","earth-like","à dominante aquatique","planète ocean"),
 			"G"=>array("Hydrogène","Helium","Methane"),
@@ -26,6 +42,11 @@ class Planete extends Object{
 			"P"=>array("Standard"),
 	);
 	
+	/**
+	 * hydrométrie nécessaire pour qu'une planète tellurique soit dans une sous-catégorie donnée
+	 * ex: 3=>0 signifie qu'en dessous d'une hydrométrie de 3 ( <=) une planète aura le sous-type 0
+	 * @var array
+	 */
 	private $sousCategorieTbyHydro=array(
 		3=>0,
 		10=>1,
@@ -35,7 +56,10 @@ class Planete extends Object{
 		65=>5,
 	);
 	
-	//masses exprimées en masses terrestres
+	/**
+	 * échelle des masses possibles pour une planète selon son type, exprimées en masses terrestres
+	 * @var array
+	 */
 	private $massesParType=array(
 		'T'=>array("min"=>0.3,"max"=>25),
 		'G'=>array("min"=>25,"max"=>1250),
@@ -45,6 +69,10 @@ class Planete extends Object{
 		'P'=>array("min"=>0.01,"max"=>0.3),
 	);
 	
+	/**
+	 * échelle des albédo possibles pour une planète selon son type (indice de réfraction entre 0 et 1)
+	 * @var array
+	 */
 	private $albedoParType=array(
 		'T'=>array("min"=>0.1,"max"=>1),
 		'G'=>array("min"=>0.3,"max"=>0.9),
@@ -54,9 +82,22 @@ class Planete extends Object{
 		'P'=>array("min"=>0.05,"max"=>0.3),
 	);
 	
+	/**
+	 * Particularités possibles pour des planètes
+	 * @var array
+	 */
 	private $particularitePlanete=array('0'=>"nothing",'M'=>'moon','Mm'=>'multiples moons','R'=>'rings','F'=>'debris field');
+	
+	/**
+	 * Particularités possibles pour des planètes
+	 * @var array
+	 */
 	private $particulariteProba=array(50=>"0",70=>'M',80=>'Mm',90=>'R',100=>'F');
 			
+	/**
+	 * id du système parent
+	 * @var integer
+	 */
 	public $systeme;
 	
 	/**
@@ -66,34 +107,93 @@ class Planete extends Object{
 	 */
 	public $objectOrbited;	
 	
+	/**
+	 * Code du type de la planète
+	 * @var string
+	 */
 	public $type;
 	
+	/**
+	 * Code du sous-type de la planète
+	 * @var integer
+	 */
 	public $sousType;
 	
+	/**
+	 * masse planétaire exprimée en masses terrestres
+	 * (une masse en unitées SI nécessite une notation scientifique qui complique les calculs inutilement) 
+	 * @var float
+	 */
 	public $masse;
 	
+	/**
+	 * code de l'éventuelle particularité de la planète
+	 * @var string
+	 */
 	public $particularite;
 	
-	public $distanceEtoile; //exprimée en astrons (1as=300 000 000km)
+	/**
+	 * distance de l'objet orbité, étoile ou barycentre
+	 * exprimée en astrons (1as=300 000 000km)
+	 * @var float
+	 */
+	public $distanceEtoile; 
 	
-	public $inclinaisonOrbite; //angle en degrées
+	/**
+	 * inclinaison orbitale selon un angle en degrées
+	 * @var float
+	 */
+	public $inclinaisonOrbite;
 	
+	/**
+	 * albédo de la planète (réfraction) entre 0 et 1
+	 * @var float
+	 */
 	public $albedo;
 	
+	/**
+	 * vitesse de la planète sur son orbite
+	 * @var float
+	 */
 	public $vitesseOrbitale;
 	
 	public $dureeAnnee;
 	
 	public $dureeJour;
 	
-	public $rayonnement; // rayonnement reçu à la surface en w/m²
+	/**
+	 * rayonnement reçu à la surface en w/m²
+	 * @var float
+	 */
+	public $rayonnement; 
 	
-	public $atmosphere; //pression atmosphérique en Bar
+	/**
+	 * pression atmosphérique en Bar
+	 * @var float
+	 */
+	public $atmosphere; 
 	
-	public $hydrometrie=null; //quantité d'eau sur la planète en milième de pourcentage de sa masse (terre = 0.023% =23)
+	/**
+	 * quantité d'eau sur la planète exprimée en milième de pourcentage de sa masse (terre = 0.023% =23)
+	 * @var float
+	 */
+	public $hydrometrie=null;
 	
+	/**
+	 * tag facilitant les recherches, après le calcul des températures planétaires un monde très propice à la vie est tagué "Eden"
+	 * @var boolean
+	 */
 	public $eden=0;
 
+	/**
+	 * constructeur
+	 * @param integger $systeme
+	 * @param integer $idObjetOrbited
+	 * @param float $masseObjetOrbited
+	 * @param float $rayonnement
+	 * @param integer $rangPlanete
+	 * @param real $contractionSysteme
+	 */
 	public function __construct($systeme,$idObjetOrbited,$masseObjetOrbited,$rayonnement,$rangPlanete,$contractionSysteme=0.5){
 		
 		$type=maths_service::float_rand(0, count($this->naturePlanete)-1);
@@ -142,7 +242,11 @@ class Planete extends Object{
 		
 		$this->rayonnement=bcdiv($rayonnement,bcmul($this->distanceEtoile,4*pi()),4);
 	}
-	
+
+	/**
+	 * surcharge pour afficher un nombre d'infos limitées
+	 * @see \BigBang\Object::__toString()
+	 */
 	public function __toString(){
 		$string="";
 		if(in_array($this->type,array("T","C","G"))){
@@ -162,17 +266,29 @@ class Planete extends Object{
 		return $string;
 				
 	}
+	
+	/**
+	 * renvoie le code couleur de la planète en fonction de son type
+	 */
 	public function getColor(){
 		return $this->codeCouleurType[$this->type];
 	}
 
 	
+	/**
+	 * @see \BigBang\Object::__toSqlValues()
+	 */
 	public function __toSqlValues(){
 		return "('',".$this->systeme.",".$this->objectOrbited.",'".$this->type."','".$this->sousType."','".$this->masse."','"
 				.$this->particularite."','".$this->distanceEtoile."','".$this->inclinaisonOrbite."','".$this->dureeAnnee."','".
 		$this->dureeJour."','".$this->albedo."','".$this->rayonnement."','".$this->hydrometrie."','".$this->eden."') ";
 	}
 	
+	/**
+	 * calcule une orbite circulaire en fonction des masses
+	 * @param float $masseObjetOrbited
+	 * @return number
+	 */
 	public function simplifiedCircularOrbit($masseObjetOrbited){
 		/**
 		 * données de test pour l'orbite de la lune autour de la terre

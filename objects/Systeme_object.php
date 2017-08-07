@@ -3,11 +3,35 @@ namespace BigBang;
 
 class Systeme extends Object{
 	
+	/***
+	 * identifier
+	 * @var integer
+	 */
 	public $id;
+	
+	/***
+	 * nom textuel
+	 * @var string
+	 */
 	public $name;
 		
+	/***
+	 * coordonnée angulaire (ou angle dans le système de coordonées polaires) en degrées
+	 * @var float
+	 */
 	public $angle;
+	
+	/***
+	 *  coordonnée radiale (ou rayon dans le système de coordonées polaires) en années-lumières
+	 * @var float
+	 */
 	public $distance;
+	
+	/***
+	 * altitude par rapport au 0 absolu de la galaxie en années-lumières
+	 * pour des raisons de lecture on a choisi une altitude plutot qu'un angle
+	 * @var float
+	 */
 	public $altitude;
 	
 	public function __construct($name=null){
@@ -19,14 +43,25 @@ class Systeme extends Object{
 		$this->create_coordinates();
 	}
 	
-	
+	/**
+	 * surcharge pour mettre le texte
+	 * @see \BigBang\Object::__toString()
+	 */
 	public function __toString(){
 		return "Système ".$this->name.", coordonées ".$this->angle." ".$this->distance." ".$this->altitude."";
 	}
+	
+	/***
+	 * (non-PHPdoc)
+	 * @see \BigBang\Object::__toSqlValues()
+	 */
 	public function __toSqlValues(){
 		return "('','".$this->name."','".$this->angle."','".$this->distance."','".$this->altitude."')";
 	}
 	
+	/**
+	 * détermine des coordonées pseudo-aléatoire qui correspondent au modèle de galaxie demandé
+	 */
 	private function create_coordinates(){
 		//déterminer la zone (bras ou corps)
 		$probaZone=rand(0,100);
@@ -113,7 +148,11 @@ class Systeme extends Object{
 		
 	}
 	
-	static function RandomString($length) {
+	/**
+	 * renvoie une chaine de caractères aléatoires de taille spécifiée
+	 * @param integer $length
+	 */
+	private function RandomString($length) {
 	    $keys = array_merge(range('a', 'z'), range('A', 'Z'));
 	    $key="";
 	    for($i=0; $i < $length; $i++) {

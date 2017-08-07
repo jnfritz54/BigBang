@@ -1,24 +1,44 @@
 <?php 
+/**
+ * fichier de la classe Star définissant et construisant les objets étoiles
+ */
 namespace BigBang;
 
+/**
+ * Définition de l'objet "Star" et méthodes pour le construire 
+ */
 class Star extends Object{
 
+	/**
+	 * Types d'étoiles génériques, code et textuel
+	 * @var array
+	 */
 	private $etoileTypes=array('L'=>"naine brune",'M'=>"naine rouge",
 			'K'=>"naine orange",'G'=>'naine jaune','F'=>"jaune/blanche",'A'=>"blanche",'B'=>"blanche/bleue",'O'=>"bleue");
 	
+	/**
+	 * couleur hexa pour représentation de l'étoile en fonction de son type surchargé
+	 * @see Star::$typeSurcharge
+	 * @var array
+	 */
 	public $hexaByTypeSurcharge=array('1'=>"#655555",'2'=>"#FF2020", '3'=>"#DD00DD","4"=>"#000000",
 		'L'=>"#201020",'D'=>"#EEFFEE",'D2'=>"#EEFFEE",'M'=>"#FF2020",
 		'K'=>"#FF9000",'G'=>'#EEEE00','F'=>"#FF9300",'A'=>"#FFFFFF",'B'=>"#AECBE1",'O'=>"#7BA7F3");
+	
 	/***
-	 * classification personelle des objets stellaires permettant le mécanisme de surcharge de type
+	 * classification personelle des objets stellaires permettant le mécanisme de surcharge de type en fonction de son age et masse
+	 * @var array
 	 */
 	private $stellarObjectClassification=array('1'=>"Proto-étoile",'2'=>"géante ou supergéante rouge", '3'=>"Etoile à neutrons","4"=>"Trou noir",
 		'L'=>"naine brune",'D'=>"Naine blanche",'D2'=>"Naine blanche avec nébuleuse planétaire",'M'=>"naine rouge",
 		'K'=>"naine orange",'G'=>'naine jaune','F'=>"jaune/blanche",'A'=>"blanche",'B'=>"blanche/bleue",'O'=>"bleue");
 		
-	//les ages sont calculés en milliards d'années
-	
-	//durée de vie par masse: https://fr.wikipedia.org/wiki/%C3%89volution_stellaire
+	/**
+	 * Evolution simplifiée des étoiles en fonction de leur type et age
+	 * les ages sont calculés en milliards d'années
+	 * @see https://fr.wikipedia.org/wiki/%C3%89volution_stellaire "durée de vie par masse)
+	 * @var array
+	 */
 	private $evolutionByType=array(
 			"L"=>array(
 					array('label'=>"Formation", 'age_min'=>"0",'age_max'=>"0.01","code"=>"FORM",'surcharge'=>"1"),
@@ -70,6 +90,10 @@ class Star extends Object{
 			),
 	);
 	
+	/**
+	 * échelle des masses possibles en fonction du type d'étoile (exprimées en masses solaires)
+	 * @var array
+	 */
 	private $massesByType=array(
 			"L"=>array("min"=>"0.001","max"=>"0.08"),
 			"M"=>array("min"=>"0.08","max"=>"0.5"),
@@ -96,26 +120,60 @@ class Star extends Object{
 			"100"=>"O", //2 
 	);
 	
+	/**
+	 * id du système parent
+	 * @var integer
+	 */
 	public $systeme=null;
 	
-	public $distanceBarycentre=0; //En astrons
+	/**
+	 * distance etoile-barycentre en astrons (si système multiple, sinon 0)
+	 * @var float
+	 */
+	public $distanceBarycentre=0;
 	
-	//type de l'étoile à sa création
+	/**
+	 * type de l'étoile à sa création
+	 * @var string
+	 */
 	public $typeOrigine=null;
 	
-	//type de l'étoile une fois pondéré son age
+
+	/**
+	 * type de l'étoile une fois pondéré son age
+	 * @var string
+	 */
 	public $typeSurcharge;
 	
+	/**
+	 * période textuelle de l'histoire stellaire (formation - séquence principale - ...) 
+	 * @var string
+	 */
 	public $periodeActuelle;
 	
+	/**
+	 * masse d'origine servant aux différents calculs (en masses solaires)
+	 * @var float
+	 */
 	public $masseOrigine;	
 	
-	public $age;
+	/**
+	 * age en miliards d'années
+	 * @var float
+	 */
+	public $age;		
 	
-	public $temperature;
-	
+	/**
+	 * puissance de rayonnement brut de l'étoile
+	 * @see Star::massLuminosityRelationWithSurcharge() calcul de la propriété
+	 * @var unknown
+	 */
 	public $rayonnement;
 	
+	/**
+	 * rayon de l'étoile en km
+	 * @var unknown
+	 */
 	public $rayon;
 	
 
@@ -167,15 +225,27 @@ class Star extends Object{
 		
 	}
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \BigBang\Object::__toString()
+	 */
 	public function __toString(){
 		return $this->typeOrigine."(".$this->typeSurcharge.") age: ".$this->age."MA masse: ".$this->masseOrigine."Ms \n";
 	}
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \BigBang\Object::__toSqlValues()
+	 */
 	public function __toSqlValues(){
 		return "('','".$this->systeme."' ,'".$this->distanceBarycentre."','".$this->typeOrigine."','".$this->periodeActuelle."','".$this->typeSurcharge."',
 				'".$this->age."','".$this->masseOrigine."','".$this->rayonnement."','".$this->rayon."') ";
 	}
 
+	/**
+	 * Calcul de la luminosité en fonction du type de l'étoile et de son état actuel
+	 * @see Star::massLuminosityRelation() calcul de la propriété pour les séquences principales
+	 */
 	private function massLuminosityRelationWithSurcharge(){
 		switch($this->typeSurcharge){
 			case 'L': //brown dwarf, lum=0				
@@ -196,7 +266,11 @@ class Star extends Object{
 		}
 	}
 	
-	//https://en.wikipedia.org/wiki/Mass%E2%80%93luminosity_relation
+	
+	/**
+	 * Calcul de la luminosité en fonction du type de l'étoile et de son état actuel
+	 * @see https://en.wikipedia.org/wiki/Mass%E2%80%93luminosity_relation
+	 */
 	private function massLuminosityRelation(){
 		$luminositeSoleil='3.846e26'; //exprimée en W 
 		$luminositeSoleil=maths_service::exp2int($luminositeSoleil);
@@ -227,6 +301,12 @@ class Star extends Object{
 		return $L;
 	}
 
+	/**
+	 * Calcul du rayon en fonction de la masse et de l'état actuel de l'étoile
+	 * @see Star::massRayonRelationBlackHole pour les trous noirs
+	 * @see Star::massRayonRelationSequencePrincipale pour les séquences principales
+	 * @see Starr::massRayonRelationNaineBlanche pour les naines blanches
+	 */
 	private function massRayonRelationWithSurcharge(){
 		switch($this->typeSurcharge){
 			case 4: //blackhole: rayon = 0 (singularité) rayon = rayon de l'horizon des évenements
@@ -255,10 +335,10 @@ class Star extends Object{
 	
 	/***
 	 * calcul le rayon de l'horizon des evenements d'un trou noir
-	 * @return string
+	 * @see https://fr.wikipedia.org/wiki/Horizon_des_%C3%A9v%C3%A8nements
+	 * @return float
 	 */
 	private function massRayonRelationBlackHole(){
-		//https://fr.wikipedia.org/wiki/Horizon_des_%C3%A9v%C3%A8nements
 		// R= (2GM)/c²
 		$masseSoleil='1.9891e30';
 		$masseSoleil=maths_service::exp2int($masseSoleil);
@@ -267,12 +347,16 @@ class Star extends Object{
 		$R=bcdiv(bcmul($mu,2,4),pow(Universe::$c,2));
 		$this->rayon=$R;	
 		return $R;
-		
 	}
 	
+	/***
+	 * calcul le rayon d'une étoile de séquence principale
+	 * @see https://fr.wikipedia.org/wiki/Relation_masse-rayon#.C3.89toiles_de_la_s.C3.A9quence_principale
+	 * @see http://www2.astro.psu.edu/users/rbc/a534/lec18.pdf
+	 * @return float
+	 */
 	private function massRayonRelationSequencePrincipale(){
-		//http://www2.astro.psu.edu/users/rbc/a534/lec18.pdf
-		//https://fr.wikipedia.org/wiki/Relation_masse-rayon#.C3.89toiles_de_la_s.C3.A9quence_principale
+	
 		$rayonSoleil='695700000'; //exprimée en m		
 		$masseSoleil='1.9891e30';
 		$masseSoleil=maths_service::exp2int($masseSoleil);
@@ -292,6 +376,10 @@ class Star extends Object{
 		return $R;
 	}
 	
+	/**
+	 * calcul de rayon spécifique aux naines blanches 
+	 * @return float
+	 */
 	private function massRayonRelationNaineBlanche(){
 		$rayonSoleil='695700000'; //exprimée en m
 		$rayon=bcdiv(1/pow($this->masseOrigine,bcdiv(1,3,6)),4);

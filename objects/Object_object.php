@@ -1,9 +1,24 @@
 <?php 
+/**
+ * fichier de classe abstraite Object
+ */
 namespace BigBang;
 
+/**
+ * définition de la classe abstraite Object implémentant des méthodes génériques à hériter
+ */
 abstract class Object {
 	
+	/**
+	 * signification des codes verbeux
+	 * @var array,
+	 */
 	public $verboseTypes=array(0=>"Silent",1=>"Important",2=>"Partial",3=>"Verbose");
+	
+	/**
+	 * mode verbeux de l'objet
+	 * @var integer
+	 */
 	public $verbose=1;
 
 	/***
