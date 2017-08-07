@@ -1,6 +1,12 @@
 <?php 
+/**
+ * fichier de définition et construction de l'objet Systeme
+ */
 namespace BigBang;
 
+/**
+ * classe de définition et construction de l'objet Systeme
+ */
 class Systeme extends Object{
 	
 	/***
@@ -34,6 +40,10 @@ class Systeme extends Object{
 	 */
 	public $altitude;
 	
+	/**
+	 * constructeur de classe
+	 * @param string $name nom optionnel du systeme
+	 */
 	public function __construct($name=null){
 		if($name==null){
 			$name=$this->RandomString(10);	
