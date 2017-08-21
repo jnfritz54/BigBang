@@ -53,3 +53,6 @@ Addendum:
 2) generate group viewer --done--
 3) generate system viewer --done--
 4) generate lifeforms distribution viewer --done--
+
+Todo:
+1) mysqli object to service
